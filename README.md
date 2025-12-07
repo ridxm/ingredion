@@ -14,5 +14,3 @@ This platform provides automated ESG data extraction from sustainability reports
 - **Framework Analysis**: Track coverage for GRI, TCFD, SBTi, SDGs, CDP
 - **AI Insights**: Automated generation of strategic insights and recommendations
 - **Target Tracking**: Monitor progress toward sustainability goals
-
-# ingredion
