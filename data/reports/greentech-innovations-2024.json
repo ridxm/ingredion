@@ -1,0 +1,469 @@
+{
+  "company": "GreenTech Innovations",
+  "year": 2024,
+  "reportDate": "2024-01-01",
+  "reportUrl": "2024-environmental-update.pdf",
+  "rawMetrics": [
+    {
+      "name": "scope1",
+      "value": 120,
+      "unit": "kt CO2e",
+      "confidence": 0.95
+    },
+    {
+      "name": "scope2",
+      "value": 80,
+      "unit": "kt CO2e",
+      "confidence": 0.9
+    },
+    {
+      "name": "scope3",
+      "value": 300,
+      "unit": "kt CO2e",
+      "confidence": 0.85
+    },
+    {
+      "name": "totalEmissions",
+      "value": 500,
+      "unit": "kt CO2e",
+      "confidence": 0.9
+    },
+    {
+      "name": "emissionsIntensity",
+      "value": 45,
+      "unit": "kg CO2e/ton",
+      "confidence": 0.8
+    },
+    {
+      "name": "renewable_energy_pct",
+      "value": 70,
+      "unit": "%",
+      "confidence": 0.9
+    },
+    {
+      "name": "totalEnergyConsumption",
+      "value": 1500,
+      "unit": "GWh",
+      "confidence": 0.85
+    },
+    {
+      "name": "water_intensity",
+      "value": 1.5,
+      "unit": "m³/t",
+      "confidence": 0.8
+    },
+    {
+      "name": "waterWithdrawal",
+      "value": 50,
+      "unit": "million m³",
+      "confidence": 0.9
+    },
+    {
+      "name": "waterRecycled",
+      "value": 40,
+      "unit": "%",
+      "confidence": 0.85
+    },
+    {
+      "name": "waste_landfill_pct",
+      "value": 20,
+      "unit": "%",
+      "confidence": 0.8
+    },
+    {
+      "name": "wasteGenerated",
+      "value": 200,
+      "unit": "kt",
+      "confidence": 0.85
+    },
+    {
+      "name": "wasteRecycled",
+      "value": 60,
+      "unit": "%",
+      "confidence": 0.9
+    },
+    {
+      "name": "employeeTurnover",
+      "value": 15,
+      "unit": "%",
+      "confidence": 0.8
+    },
+    {
+      "name": "diversityPct",
+      "value": 35,
+      "unit": "%",
+      "confidence": 0.85
+    },
+    {
+      "name": "safetyIncidents",
+      "value": 1.2,
+      "unit": "per 200,000 hours",
+      "confidence": 0.8
+    },
+    {
+      "name": "womenInLeadership",
+      "value": 25,
+      "unit": "%",
+      "confidence": 0.85
+    },
+    {
+      "name": "boardIndependence",
+      "value": 75,
+      "unit": "%",
+      "confidence": 0.9
+    }
+  ],
+  "frameworks": {
+    "GRI": 85,
+    "TCFD": 80,
+    "SBTi": 75,
+    "SDG": 70
+  },
+  "targets": [
+    {
+      "name": "Net Zero by 2050",
+      "baseline": 600,
+      "target": 0,
+      "deadline": 2050,
+      "current": 400,
+      "progress": 33.3,
+      "category": "Emissions"
+    }
+  ],
+  "materiality": [],
+  "metrics": {
+    "scope1": 120,
+    "scope2": 80,
+    "scope3": 300,
+    "totalemissions": 500,
+    "emissionsintensity": 45,
+    "renewable_energy_pct": 70,
+    "totalenergyconsumption": 1500,
+    "water_intensity": 1.5,
+    "waterwithdrawal": 50,
+    "waterrecycled": 40,
+    "waste_landfill_pct": 20,
+    "wastegenerated": 200,
+    "wasterecycled": 60,
+    "employeeturnover": 15,
+    "diversitypct": 35,
+    "safetyincidents": 1.2,
+    "womeninleadership": 25,
+    "boardindependence": 75,
+    "totalEmissions": 500,
+    "wasteRecycled": 80
+  },
+  "dataQuality": {
+    "score": 55,
+    "warnings": [
+      "Unknown metric type: totalEmissions",
+      "Unknown metric type: emissionsIntensity",
+      "Unknown metric type: totalEnergyConsumption",
+      "Unknown metric type: waterWithdrawal",
+      "Unknown metric type: waterRecycled",
+      "Unknown metric type: wasteGenerated",
+      "Unknown metric type: wasteRecycled",
+      "Unknown metric type: employeeTurnover",
+      "Unknown metric type: diversityPct",
+      "Unknown metric type: safetyIncidents",
+      "Unknown metric type: womenInLeadership",
+      "Unknown metric type: boardIndependence",
+      "Calculated total emissions (500 kt CO2e) from individual scopes",
+      "Calculated waste recycled (80%) from landfill percentage"
+    ],
+    "missingRequiredMetrics": [
+      "Total GHG Emissions"
+    ],
+    "metricDetails": [
+      {
+        "id": "scope1",
+        "name": "Scope 1 Emissions",
+        "value": 120,
+        "unit": "kt CO2e",
+        "originalValue": 120,
+        "originalUnit": "kt CO2e",
+        "confidence": 0.95,
+        "dataQuality": "high",
+        "warnings": []
+      },
+      {
+        "id": "scope2",
+        "name": "Scope 2 Emissions",
+        "value": 80,
+        "unit": "kt CO2e",
+        "originalValue": 80,
+        "originalUnit": "kt CO2e",
+        "confidence": 0.9,
+        "dataQuality": "high",
+        "warnings": []
+      },
+      {
+        "id": "scope3",
+        "name": "Scope 3 Emissions",
+        "value": 300,
+        "unit": "kt CO2e",
+        "originalValue": 300,
+        "originalUnit": "kt CO2e",
+        "confidence": 0.85,
+        "dataQuality": "high",
+        "warnings": []
+      },
+      {
+        "id": "totalemissions",
+        "name": "totalEmissions",
+        "value": 500,
+        "unit": "kt CO2e",
+        "originalValue": 500,
+        "originalUnit": "kt CO2e",
+        "confidence": 0.9,
+        "dataQuality": "low",
+        "warnings": [
+          "Unknown metric type: totalEmissions"
+        ]
+      },
+      {
+        "id": "emissionsintensity",
+        "name": "emissionsIntensity",
+        "value": 45,
+        "unit": "kg CO2e/ton",
+        "originalValue": 45,
+        "originalUnit": "kg CO2e/ton",
+        "confidence": 0.8,
+        "dataQuality": "low",
+        "warnings": [
+          "Unknown metric type: emissionsIntensity"
+        ]
+      },
+      {
+        "id": "renewable_energy_pct",
+        "name": "Renewable Energy Percentage",
+        "value": 70,
+        "unit": "%",
+        "originalValue": 70,
+        "originalUnit": "%",
+        "confidence": 0.9,
+        "dataQuality": "high",
+        "warnings": []
+      },
+      {
+        "id": "totalenergyconsumption",
+        "name": "totalEnergyConsumption",
+        "value": 1500,
+        "unit": "GWh",
+        "originalValue": 1500,
+        "originalUnit": "GWh",
+        "confidence": 0.85,
+        "dataQuality": "low",
+        "warnings": [
+          "Unknown metric type: totalEnergyConsumption"
+        ]
+      },
+      {
+        "id": "water_intensity",
+        "name": "Water Intensity",
+        "value": 1.5,
+        "unit": "m³/t",
+        "originalValue": 1.5,
+        "originalUnit": "m³/t",
+        "confidence": 0.8,
+        "dataQuality": "high",
+        "warnings": []
+      },
+      {
+        "id": "waterwithdrawal",
+        "name": "waterWithdrawal",
+        "value": 50,
+        "unit": "million m³",
+        "originalValue": 50,
+        "originalUnit": "million m³",
+        "confidence": 0.9,
+        "dataQuality": "low",
+        "warnings": [
+          "Unknown metric type: waterWithdrawal"
+        ]
+      },
+      {
+        "id": "waterrecycled",
+        "name": "waterRecycled",
+        "value": 40,
+        "unit": "%",
+        "originalValue": 40,
+        "originalUnit": "%",
+        "confidence": 0.85,
+        "dataQuality": "low",
+        "warnings": [
+          "Unknown metric type: waterRecycled"
+        ]
+      },
+      {
+        "id": "waste_landfill_pct",
+        "name": "Waste to Landfill %",
+        "value": 20,
+        "unit": "%",
+        "originalValue": 20,
+        "originalUnit": "%",
+        "confidence": 0.8,
+        "dataQuality": "high",
+        "warnings": []
+      },
+      {
+        "id": "wastegenerated",
+        "name": "wasteGenerated",
+        "value": 200,
+        "unit": "kt",
+        "originalValue": 200,
+        "originalUnit": "kt",
+        "confidence": 0.85,
+        "dataQuality": "low",
+        "warnings": [
+          "Unknown metric type: wasteGenerated"
+        ]
+      },
+      {
+        "id": "wasterecycled",
+        "name": "wasteRecycled",
+        "value": 60,
+        "unit": "%",
+        "originalValue": 60,
+        "originalUnit": "%",
+        "confidence": 0.9,
+        "dataQuality": "low",
+        "warnings": [
+          "Unknown metric type: wasteRecycled"
+        ]
+      },
+      {
+        "id": "employeeturnover",
+        "name": "employeeTurnover",
+        "value": 15,
+        "unit": "%",
+        "originalValue": 15,
+        "originalUnit": "%",
+        "confidence": 0.8,
+        "dataQuality": "low",
+        "warnings": [
+          "Unknown metric type: employeeTurnover"
+        ]
+      },
+      {
+        "id": "diversitypct",
+        "name": "diversityPct",
+        "value": 35,
+        "unit": "%",
+        "originalValue": 35,
+        "originalUnit": "%",
+        "confidence": 0.85,
+        "dataQuality": "low",
+        "warnings": [
+          "Unknown metric type: diversityPct"
+        ]
+      },
+      {
+        "id": "safetyincidents",
+        "name": "safetyIncidents",
+        "value": 1.2,
+        "unit": "per 200,000 hours",
+        "originalValue": 1.2,
+        "originalUnit": "per 200,000 hours",
+        "confidence": 0.8,
+        "dataQuality": "low",
+        "warnings": [
+          "Unknown metric type: safetyIncidents"
+        ]
+      },
+      {
+        "id": "womeninleadership",
+        "name": "womenInLeadership",
+        "value": 25,
+        "unit": "%",
+        "originalValue": 25,
+        "originalUnit": "%",
+        "confidence": 0.85,
+        "dataQuality": "low",
+        "warnings": [
+          "Unknown metric type: womenInLeadership"
+        ]
+      },
+      {
+        "id": "boardindependence",
+        "name": "boardIndependence",
+        "value": 75,
+        "unit": "%",
+        "originalValue": 75,
+        "originalUnit": "%",
+        "confidence": 0.9,
+        "dataQuality": "low",
+        "warnings": [
+          "Unknown metric type: boardIndependence"
+        ]
+      }
+    ]
+  },
+  "insights": [
+    {
+      "id": "1",
+      "title": "Strong Renewable Energy Utilization",
+      "description": "GreenTech Innovations has achieved a 70% renewable energy usage, significantly contributing to its sustainability goals. This positions the company as a leader in renewable energy adoption, reducing reliance on non-renewable resources. Continuing to increase renewable energy usage can further decrease emissions intensity and align with global sustainability standards.",
+      "category": "Energy",
+      "severity": "positive",
+      "tags": [
+        "renewable energy",
+        "sustainability",
+        "leadership"
+      ],
+      "generatedAt": "2025-11-20T23:37:15.127Z"
+    },
+    {
+      "id": "2",
+      "title": "Need for Enhanced Emission Reduction Strategies",
+      "description": "The company has made 33.3% progress towards its 'Net Zero by 2050' target, with current emissions at 400 units from a baseline of 600. While this is a positive trajectory, accelerating reduction efforts is crucial to meet the 2050 target. Strategies such as enhancing energy efficiency and investing in carbon capture technologies could be beneficial.",
+      "category": "Emissions",
+      "severity": "action",
+      "tags": [
+        "net zero",
+        "emissions reduction",
+        "strategy"
+      ],
+      "generatedAt": "2025-11-20T23:37:15.127Z"
+    },
+    {
+      "id": "3",
+      "title": "Improvement Needed in Waste Management",
+      "description": "With 20% of waste going to landfill and only 40% of water being recycled, there is an opportunity to enhance waste and water management practices. Implementing more robust recycling programs and water conservation technologies can reduce environmental impact and increase resource efficiency.",
+      "category": "Waste",
+      "severity": "warning",
+      "tags": [
+        "waste management",
+        "recycling",
+        "efficiency"
+      ],
+      "generatedAt": "2025-11-20T23:37:15.127Z"
+    },
+    {
+      "id": "4",
+      "title": "Board Independence as a Governance Strength",
+      "description": "The company's board independence stands at 75%, reflecting strong governance practices. This level of independence can support unbiased decision-making and enhance strategic oversight. Maintaining or increasing this level can further strengthen stakeholder confidence and company reputation.",
+      "category": "Governance",
+      "severity": "positive",
+      "tags": [
+        "governance",
+        "board independence",
+        "reputation"
+      ],
+      "generatedAt": "2025-11-20T23:37:15.127Z"
+    },
+    {
+      "id": "5",
+      "title": "Framework Alignment and Reporting Enhancement",
+      "description": "GreenTech Innovations has achieved substantial coverage of key frameworks, with GRI at 85% and TCFD at 80%. However, there is room to improve SBTi and SDG alignment, which currently stand at 75% and 70% respectively. Enhancing alignment with these frameworks can improve transparency and accountability, aligning better with investor expectations.",
+      "category": "Supply Chain",
+      "severity": "alert",
+      "tags": [
+        "framework alignment",
+        "transparency",
+        "accountability"
+      ],
+      "generatedAt": "2025-11-20T23:37:15.127Z"
+    }
+  ]
+}

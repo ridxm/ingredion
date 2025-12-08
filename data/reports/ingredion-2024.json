@@ -1,0 +1,403 @@
+{
+  "company": "Ingredion",
+  "year": 2024,
+  "reportDate": "2024-01-01",
+  "reportUrl": "Ingredion 2024 Sustainability Report.pdf",
+  "rawMetrics": [
+    {
+      "name": "scope1",
+      "value": 150,
+      "unit": "kt CO2e",
+      "confidence": 0.9
+    },
+    {
+      "name": "scope2",
+      "value": 200,
+      "unit": "kt CO2e",
+      "confidence": 0.85
+    },
+    {
+      "name": "scope3",
+      "value": 1200,
+      "unit": "kt CO2e",
+      "confidence": 0.8
+    },
+    {
+      "name": "totalEmissions",
+      "value": 1550,
+      "unit": "kt CO2e",
+      "confidence": 0.9
+    },
+    {
+      "name": "emissionsIntensity",
+      "value": 0.5,
+      "unit": "kg CO2e/ton",
+      "confidence": 0.85
+    },
+    {
+      "name": "renewable_energy_pct",
+      "value": 45,
+      "unit": "%",
+      "confidence": 0.9
+    },
+    {
+      "name": "totalEnergyConsumption",
+      "value": 500,
+      "unit": "GWh",
+      "confidence": 0.9
+    },
+    {
+      "name": "water_intensity",
+      "value": 2.5,
+      "unit": "m³/t",
+      "confidence": 0.8
+    },
+    {
+      "name": "waterWithdrawal",
+      "value": 50,
+      "unit": "million m³",
+      "confidence": 0.85
+    },
+    {
+      "name": "waterRecycled",
+      "value": 30,
+      "unit": "%",
+      "confidence": 0.8
+    },
+    {
+      "name": "waste_landfill_pct",
+      "value": 10,
+      "unit": "%",
+      "confidence": 0.9
+    },
+    {
+      "name": "wasteGenerated",
+      "value": 100,
+      "unit": "kt",
+      "confidence": 0.85
+    },
+    {
+      "name": "wasteRecycled",
+      "value": 60,
+      "unit": "%",
+      "confidence": 0.9
+    },
+    {
+      "name": "employeeTurnover",
+      "value": 15,
+      "unit": "%",
+      "confidence": 0.8
+    },
+    {
+      "name": "diversityPct",
+      "value": 40,
+      "unit": "%",
+      "confidence": 0.85
+    },
+    {
+      "name": "safetyIncidents",
+      "value": 1.2,
+      "unit": "per 200,000 hours",
+      "confidence": 0.9
+    },
+    {
+      "name": "womenInLeadership",
+      "value": 25,
+      "unit": "%",
+      "confidence": 0.85
+    },
+    {
+      "name": "boardIndependence",
+      "value": 70,
+      "unit": "%",
+      "confidence": 0.9
+    }
+  ],
+  "frameworks": {
+    "GRI": 85,
+    "TCFD": 75,
+    "SBTi": 80,
+    "SDG": 70
+  },
+  "targets": [
+    {
+      "name": "Net Zero by 2050",
+      "baseline": 600,
+      "target": 0,
+      "deadline": 2050,
+      "current": 400,
+      "progress": 50,
+      "category": "Emissions"
+    }
+  ],
+  "materiality": [],
+  "metrics": {
+    "scope1": 150,
+    "scope2": 200,
+    "scope3": 1200,
+    "totalemissions": 1550,
+    "emissionsintensity": 0.5,
+    "renewable_energy_pct": 45,
+    "totalenergyconsumption": 500,
+    "water_intensity": 2.5,
+    "waterwithdrawal": 50,
+    "waterrecycled": 30,
+    "waste_landfill_pct": 10,
+    "wastegenerated": 100,
+    "wasterecycled": 60,
+    "employeeturnover": 15,
+    "diversitypct": 40,
+    "safetyincidents": 1.2,
+    "womeninleadership": 25,
+    "boardindependence": 70,
+    "totalEmissions": 1550,
+    "wasteRecycled": 90
+  },
+  "dataQuality": {
+    "score": 55,
+    "warnings": [
+      "Unknown metric type: totalEmissions",
+      "Unknown metric type: emissionsIntensity",
+      "Unknown metric type: totalEnergyConsumption",
+      "Unknown metric type: waterWithdrawal",
+      "Unknown metric type: waterRecycled",
+      "Unknown metric type: wasteGenerated",
+      "Unknown metric type: wasteRecycled",
+      "Unknown metric type: employeeTurnover",
+      "Unknown metric type: diversityPct",
+      "Unknown metric type: safetyIncidents",
+      "Unknown metric type: womenInLeadership",
+      "Unknown metric type: boardIndependence",
+      "Calculated total emissions (1550 kt CO2e) from individual scopes",
+      "Calculated waste recycled (90%) from landfill percentage"
+    ],
+    "missingRequiredMetrics": [
+      "Total GHG Emissions"
+    ],
+    "metricDetails": [
+      {
+        "id": "scope1",
+        "name": "Scope 1 Emissions",
+        "value": 150,
+        "unit": "kt CO2e",
+        "originalValue": 150,
+        "originalUnit": "kt CO2e",
+        "confidence": 0.9,
+        "dataQuality": "high",
+        "warnings": []
+      },
+      {
+        "id": "scope2",
+        "name": "Scope 2 Emissions",
+        "value": 200,
+        "unit": "kt CO2e",
+        "originalValue": 200,
+        "originalUnit": "kt CO2e",
+        "confidence": 0.85,
+        "dataQuality": "high",
+        "warnings": []
+      },
+      {
+        "id": "scope3",
+        "name": "Scope 3 Emissions",
+        "value": 1200,
+        "unit": "kt CO2e",
+        "originalValue": 1200,
+        "originalUnit": "kt CO2e",
+        "confidence": 0.8,
+        "dataQuality": "high",
+        "warnings": []
+      },
+      {
+        "id": "totalemissions",
+        "name": "totalEmissions",
+        "value": 1550,
+        "unit": "kt CO2e",
+        "originalValue": 1550,
+        "originalUnit": "kt CO2e",
+        "confidence": 0.9,
+        "dataQuality": "low",
+        "warnings": [
+          "Unknown metric type: totalEmissions"
+        ]
+      },
+      {
+        "id": "emissionsintensity",
+        "name": "emissionsIntensity",
+        "value": 0.5,
+        "unit": "kg CO2e/ton",
+        "originalValue": 0.5,
+        "originalUnit": "kg CO2e/ton",
+        "confidence": 0.85,
+        "dataQuality": "low",
+        "warnings": [
+          "Unknown metric type: emissionsIntensity"
+        ]
+      },
+      {
+        "id": "renewable_energy_pct",
+        "name": "Renewable Energy Percentage",
+        "value": 45,
+        "unit": "%",
+        "originalValue": 45,
+        "originalUnit": "%",
+        "confidence": 0.9,
+        "dataQuality": "high",
+        "warnings": []
+      },
+      {
+        "id": "totalenergyconsumption",
+        "name": "totalEnergyConsumption",
+        "value": 500,
+        "unit": "GWh",
+        "originalValue": 500,
+        "originalUnit": "GWh",
+        "confidence": 0.9,
+        "dataQuality": "low",
+        "warnings": [
+          "Unknown metric type: totalEnergyConsumption"
+        ]
+      },
+      {
+        "id": "water_intensity",
+        "name": "Water Intensity",
+        "value": 2.5,
+        "unit": "m³/t",
+        "originalValue": 2.5,
+        "originalUnit": "m³/t",
+        "confidence": 0.8,
+        "dataQuality": "high",
+        "warnings": []
+      },
+      {
+        "id": "waterwithdrawal",
+        "name": "waterWithdrawal",
+        "value": 50,
+        "unit": "million m³",
+        "originalValue": 50,
+        "originalUnit": "million m³",
+        "confidence": 0.85,
+        "dataQuality": "low",
+        "warnings": [
+          "Unknown metric type: waterWithdrawal"
+        ]
+      },
+      {
+        "id": "waterrecycled",
+        "name": "waterRecycled",
+        "value": 30,
+        "unit": "%",
+        "originalValue": 30,
+        "originalUnit": "%",
+        "confidence": 0.8,
+        "dataQuality": "low",
+        "warnings": [
+          "Unknown metric type: waterRecycled"
+        ]
+      },
+      {
+        "id": "waste_landfill_pct",
+        "name": "Waste to Landfill %",
+        "value": 10,
+        "unit": "%",
+        "originalValue": 10,
+        "originalUnit": "%",
+        "confidence": 0.9,
+        "dataQuality": "high",
+        "warnings": []
+      },
+      {
+        "id": "wastegenerated",
+        "name": "wasteGenerated",
+        "value": 100,
+        "unit": "kt",
+        "originalValue": 100,
+        "originalUnit": "kt",
+        "confidence": 0.85,
+        "dataQuality": "low",
+        "warnings": [
+          "Unknown metric type: wasteGenerated"
+        ]
+      },
+      {
+        "id": "wasterecycled",
+        "name": "wasteRecycled",
+        "value": 60,
+        "unit": "%",
+        "originalValue": 60,
+        "originalUnit": "%",
+        "confidence": 0.9,
+        "dataQuality": "low",
+        "warnings": [
+          "Unknown metric type: wasteRecycled"
+        ]
+      },
+      {
+        "id": "employeeturnover",
+        "name": "employeeTurnover",
+        "value": 15,
+        "unit": "%",
+        "originalValue": 15,
+        "originalUnit": "%",
+        "confidence": 0.8,
+        "dataQuality": "low",
+        "warnings": [
+          "Unknown metric type: employeeTurnover"
+        ]
+      },
+      {
+        "id": "diversitypct",
+        "name": "diversityPct",
+        "value": 40,
+        "unit": "%",
+        "originalValue": 40,
+        "originalUnit": "%",
+        "confidence": 0.85,
+        "dataQuality": "low",
+        "warnings": [
+          "Unknown metric type: diversityPct"
+        ]
+      },
+      {
+        "id": "safetyincidents",
+        "name": "safetyIncidents",
+        "value": 1.2,
+        "unit": "per 200,000 hours",
+        "originalValue": 1.2,
+        "originalUnit": "per 200,000 hours",
+        "confidence": 0.9,
+        "dataQuality": "low",
+        "warnings": [
+          "Unknown metric type: safetyIncidents"
+        ]
+      },
+      {
+        "id": "womeninleadership",
+        "name": "womenInLeadership",
+        "value": 25,
+        "unit": "%",
+        "originalValue": 25,
+        "originalUnit": "%",
+        "confidence": 0.85,
+        "dataQuality": "low",
+        "warnings": [
+          "Unknown metric type: womenInLeadership"
+        ]
+      },
+      {
+        "id": "boardindependence",
+        "name": "boardIndependence",
+        "value": 70,
+        "unit": "%",
+        "originalValue": 70,
+        "originalUnit": "%",
+        "confidence": 0.9,
+        "dataQuality": "low",
+        "warnings": [
+          "Unknown metric type: boardIndependence"
+        ]
+      }
+    ]
+  },
+  "insights": []
+}

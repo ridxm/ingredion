@@ -1,0 +1,78 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "ESG Report Schema",
+  "description": "Standardized schema for extracted ESG data",
+  "type": "object",
+  "properties": {
+    "company": {
+      "type": "string",
+      "description": "Company name"
+    },
+    "year": {
+      "type": "integer",
+      "description": "Reporting year"
+    },
+    "reportDate": {
+      "type": "string",
+      "description": "Date report was published"
+    },
+    "reportUrl": {
+      "type": "string",
+      "description": "Original report URL or filename"
+    },
+    "metrics": {
+      "type": "object",
+      "properties": {
+        "scope1": { "type": "number", "description": "Scope 1 emissions in kt CO2e" },
+        "scope2": { "type": "number", "description": "Scope 2 emissions in kt CO2e" },
+        "scope3": { "type": "number", "description": "Scope 3 emissions in kt CO2e" },
+        "totalEmissions": { "type": "number", "description": "Total emissions in kt CO2e" },
+        "renewable_energy_pct": { "type": "number", "description": "Renewable energy percentage" },
+        "water_intensity": { "type": "number", "description": "Water intensity in m³/t" },
+        "waste_landfill_pct": { "type": "number", "description": "Waste to landfill percentage" }
+      }
+    },
+    "frameworks": {
+      "type": "object",
+      "properties": {
+        "GRI": { "type": "number", "description": "GRI coverage score" },
+        "TCFD": { "type": "number", "description": "TCFD coverage score" },
+        "SBTi": { "type": "number", "description": "SBTi coverage score" },
+        "SDG": { "type": "number", "description": "SDG coverage score" },
+        "CDP": { "type": "number", "description": "CDP score" }
+      }
+    },
+    "targets": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "name": { "type": "string" },
+          "baseline": { "type": "number" },
+          "target": { "type": "number" },
+          "deadline": { "type": "number" },
+          "current": { "type": "number" },
+          "progress": { "type": "number" },
+          "category": { "type": "string" }
+        }
+      }
+    },
+    "insights": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "id": { "type": "string" },
+          "title": { "type": "string" },
+          "description": { "type": "string" },
+          "category": { "type": "string" },
+          "severity": { "type": "string", "enum": ["positive", "alert", "warning", "action"] },
+          "tags": { "type": "array", "items": { "type": "string" } },
+          "generatedAt": { "type": "string" }
+        }
+      }
+    }
+  },
+  "required": ["company", "year", "metrics"]
+}
+
