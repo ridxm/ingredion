@@ -1,5 +1,5 @@
 from google import genai
-import os, json
+import os, json, sys
 from typing import List, Dict
 import re
 
@@ -30,11 +30,12 @@ class MetricsExtractor:
         all_metrics = []
         for chunk in text_chunks:
             response = self.client.models.generate_content(
-                model="gemini-2.5-pro",
+                model="gemini-2.5-flash",
                 contents=base_prompt.format(text=chunk)
             )
 
-            print("Raw Gemini 2.5 response:", response.text)
+            # Debug output to stderr only, not stdout
+            print(f"[Gemini Response] Extracted metrics from chunk", file=sys.stderr)
             raw_text = response.text.strip()
             try:
                 parsed = json.loads(raw_text)
@@ -53,5 +54,6 @@ class MetricsExtractor:
                         all_metrics.append(parsed)
                 else:
                     # store raw text if parsing fails
+                    print(f"[Warning] Failed to parse Gemini response: {raw_text[:100]}...", file=sys.stderr)
                     all_metrics.append({"raw_output": raw_text})
         return all_metrics

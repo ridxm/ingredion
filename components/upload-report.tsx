@@ -238,7 +238,7 @@ export default function UploadReport({ onUploadSuccess }: UploadReportProps) {
                 <div>
                   <p className="text-xs text-[#6B6E76] mb-1">Metrics Extracted</p>
                   <p className="text-sm font-medium text-[#F5F5F6]">
-                    {Object.keys(result.metrics || {}).length}
+                    {Array.isArray(result.metrics) ? result.metrics.length : Object.keys(result.metrics || {}).length}
                   </p>
                 </div>
                 <div>
@@ -251,17 +251,26 @@ export default function UploadReport({ onUploadSuccess }: UploadReportProps) {
 
               <div className="text-xs text-[#A0A3AA] bg-[#141518] p-3 rounded-md">
                 <p className="font-medium mb-2">Extracted Metrics:</p>
-                <div className="grid grid-cols-2 gap-2">
-                  {Object.entries(result.metrics || {}).slice(0, 10).map(([key, value]: [string, any]) => (
-                    <div key={key} className="flex justify-between">
-                      <span>{key}:</span>
-                      <span className="font-medium text-[#F5F5F6]">{value}</span>
-                    </div>
-                  ))}
-                  {Object.keys(result.metrics || {}).length > 10 && (
-                    <div className="col-span-2 text-[#6B6E76]">
-                      +{Object.keys(result.metrics || {}).length - 10} more metrics...
-                    </div>
+                <div className="space-y-2">
+                  {Array.isArray(result.metrics) ? (
+                    <>
+                      {result.metrics.slice(0, 10).map((metric: any, midx: number) => (
+                        <div key={midx} className="flex flex-col text-xs border-l border-[rgba(255,255,255,0.1)] pl-2 py-1">
+                          <span className="font-medium text-[#F5F5F6]">{metric.metric_name}</span>
+                          <span className="text-[#6B6E76]">
+                            {metric.value}{metric.unit ? ` ${metric.unit}` : ''} {metric.year ? `(${metric.year})` : ''}
+                          </span>
+                          <span className="text-[#5B5E66]">{metric.category}</span>
+                        </div>
+                      ))}
+                      {result.metrics.length > 10 && (
+                        <div className="text-[#6B6E76] py-1">
+                          +{result.metrics.length - 10} more metrics...
+                        </div>
+                      )}
+                    </>
+                  ) : (
+                    <p className="text-[#6B6E76]">No metrics extracted</p>
                   )}
                 </div>
               </div>

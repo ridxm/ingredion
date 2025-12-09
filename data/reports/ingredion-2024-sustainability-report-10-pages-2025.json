@@ -1,0 +1,483 @@
+{
+  "company": "Ingredion 2024 Sustainability Report 10 pages",
+  "year": 2025,
+  "metrics": {
+    "absolute_carbon_emissions_reduction": {
+      "value": 22,
+      "unit": "%",
+      "year": 2024,
+      "category": "Environmental"
+    },
+    "tier_1_priority_crops_sustainably_sourced": {
+      "value": 100,
+      "unit": "%",
+      "year": 2025,
+      "category": "Environmental"
+    },
+    "iso_26000_social_responsibility_guidance_implementation": {
+      "value": 100,
+      "unit": "%",
+      "year": 2023,
+      "category": "Social"
+    },
+    "assessment_of_human_rights_protection_practices_in_agricultural_supply_chain_(tier_1_priority_crops)": {
+      "value": 100,
+      "unit": "%",
+      "year": 2024,
+      "category": "Social"
+    },
+    "audit_of_high-risk_suppliers_for_human_rights": {
+      "value": 100,
+      "unit": "%",
+      "year": 2027,
+      "category": "Social"
+    },
+    "suppliers_meeting_high-risk_criteria_audited_for_human_rights": {
+      "value": 100,
+      "unit": "%",
+      "year": 2027,
+      "category": "Social"
+    },
+    "employee_and_contractor_trir": {
+      "value": 0.15,
+      "unit": "",
+      "year": 2030,
+      "category": "Social"
+    },
+    "increase_in_average_hours_of_training_per_employee": {
+      "value": 50,
+      "unit": "%",
+      "year": 2027,
+      "category": "Social"
+    },
+    "circular_economy_projects_in_supply_chain": {
+      "value": 3,
+      "unit": "projects",
+      "year": 2025,
+      "category": "Environmental"
+    },
+    "new_products_aligned_with_un_sdgs": {
+      "value": 75,
+      "unit": "%",
+      "year": 2027,
+      "category": "Environmental"
+    },
+    "sustainable_use_of_forest-based_resources": {
+      "value": 100,
+      "unit": "%",
+      "year": 2030,
+      "category": "Environmental"
+    },
+    "plastics_circular_economy_projects_per_country_with_manufacturing_operations": {
+      "value": 3,
+      "unit": "projects",
+      "year": 2025,
+      "category": "Environmental"
+    },
+    "absolute_scopes_1_and_2_ghg_emissions_reduction": {
+      "value": 28,
+      "unit": "%",
+      "year": 2030,
+      "category": "Environmental"
+    },
+    "absolute_scope_3_ghg_emissions_reduction": {
+      "value": 15,
+      "unit": "%",
+      "year": 2030,
+      "category": "Environmental"
+    },
+    "water_use_intensity_reduction_in_high-stress_geographies": {
+      "value": 30,
+      "unit": "%",
+      "year": 2030,
+      "category": "Environmental"
+    },
+    "avoidance_of_waste_to_landfill": {
+      "value": 100,
+      "unit": "%",
+      "year": 2030,
+      "category": "Environmental"
+    },
+    "cod_or_bod_reduction_from_wastewater_discharge": {
+      "value": 10,
+      "unit": "%",
+      "year": 2030,
+      "category": "Environmental"
+    },
+    "product_or_supply_chain_initiatives_for_plant-based_or_alternative_proteins": {
+      "value": 5,
+      "unit": "initiatives",
+      "year": 2025,
+      "category": "Environmental"
+    },
+    "projects_to_minimize_food_waste_in_supply_chain": {
+      "value": 5,
+      "unit": "projects",
+      "year": 2025,
+      "category": "Environmental"
+    },
+    "applicable_geographies_with_agricultural_efficiency_initiatives_for_smallholder_farmers": {
+      "value": 100,
+      "unit": "%",
+      "year": 2027,
+      "category": "Social"
+    },
+    "global_waxy_corn_supply_sustainably_sourced": {
+      "value": 100,
+      "unit": "%",
+      "year": 2022,
+      "category": "Environmental"
+    },
+    "extremely_high_water-stressed_sourcing_geographies_with_water_conservation_projects": {
+      "value": 100,
+      "unit": "%",
+      "year": 2025,
+      "category": "Environmental"
+    },
+    "agricultural_supply_not_using_pesticides_of_concern": {
+      "value": 100,
+      "unit": "%",
+      "year": 2025,
+      "category": "Environmental"
+    },
+    "agricultural_supply_chain_with_integrated_pest_management_or_grower_education": {
+      "value": 70,
+      "unit": "%",
+      "year": 2027,
+      "category": "Environmental"
+    },
+    "tier_1_and_2_priority_crops_sustainably_sourced": {
+      "value": 100,
+      "unit": "%",
+      "year": 2030,
+      "category": "Environmental"
+    },
+    "countries_with_measurable_community_impact": {
+      "value": 10,
+      "unit": "countries",
+      "year": 2028,
+      "category": "Social"
+    },
+    "average_volunteer_time_per_employee": {
+      "value": 2,
+      "unit": "hours",
+      "year": 2030,
+      "category": "Social"
+    },
+    "community_impact_projects_(vs_2025_baseline)": {
+      "value": 2,
+      "unit": "x baseline",
+      "year": 2030,
+      "category": "Social"
+    }
+  },
+  "rawMetrics": [
+    {
+      "metric_name": "Absolute carbon emissions reduction",
+      "value": 22,
+      "unit": "%",
+      "year": 2024,
+      "category": "Environmental"
+    },
+    {
+      "metric_name": "Tier 1 priority crops sustainably sourced",
+      "value": 85,
+      "unit": "%",
+      "year": 2024,
+      "category": "Environmental"
+    },
+    {
+      "metric_name": "ISO 26000 social responsibility guidance implementation",
+      "value": 100,
+      "unit": "%",
+      "year": 2023,
+      "category": "Social"
+    },
+    {
+      "metric_name": "Assessment of human rights protection practices in agricultural supply chain (Tier 1 priority crops)",
+      "value": 100,
+      "unit": "%",
+      "year": 2024,
+      "category": "Social"
+    },
+    {
+      "metric_name": "Audit of high-risk suppliers for human rights",
+      "value": 100,
+      "unit": "%",
+      "year": 2027,
+      "category": "Social"
+    },
+    {
+      "metric_name": "Suppliers meeting high-risk criteria audited for human rights",
+      "value": 100,
+      "unit": "%",
+      "year": 2027,
+      "category": "Social"
+    },
+    {
+      "metric_name": "Human rights protection validated across operations and supply chain",
+      "value": null,
+      "unit": null,
+      "year": 2030,
+      "category": "Social"
+    },
+    {
+      "metric_name": "Employee and contractor TRIR",
+      "value": 0.18,
+      "unit": null,
+      "year": 2025,
+      "category": "Social"
+    },
+    {
+      "metric_name": "Programs to enhance health and well-being established",
+      "value": null,
+      "unit": null,
+      "year": 2025,
+      "category": "Social"
+    },
+    {
+      "metric_name": "Significant food safety-related incidents reaching consumers",
+      "value": 0,
+      "unit": "incidents",
+      "year": 2025,
+      "category": "Social"
+    },
+    {
+      "metric_name": "Increase in average hours of training per employee",
+      "value": 50,
+      "unit": "%",
+      "year": 2027,
+      "category": "Social"
+    },
+    {
+      "metric_name": "Employee and contractor TRIR",
+      "value": 0.15,
+      "unit": null,
+      "year": 2030,
+      "category": "Social"
+    },
+    {
+      "metric_name": "Mechanism for efficient product screening deployed",
+      "value": null,
+      "unit": null,
+      "year": 2021,
+      "category": "Environmental"
+    },
+    {
+      "metric_name": "Circular economy projects in supply chain",
+      "value": 3,
+      "unit": "projects",
+      "year": 2025,
+      "category": "Environmental"
+    },
+    {
+      "metric_name": "New products aligned with UN SDGs",
+      "value": 40,
+      "unit": "%",
+      "year": 2025,
+      "category": "Environmental"
+    },
+    {
+      "metric_name": "New products aligned with UN SDGs",
+      "value": 75,
+      "unit": "%",
+      "year": 2027,
+      "category": "Environmental"
+    },
+    {
+      "metric_name": "Engagement with NGO partner to identify endangered species impact",
+      "value": null,
+      "unit": null,
+      "year": 2022,
+      "category": "Environmental"
+    },
+    {
+      "metric_name": "Agricultural biodiversity risks assessed",
+      "value": null,
+      "unit": null,
+      "year": 2023,
+      "category": "Environmental"
+    },
+    {
+      "metric_name": "Projects for net positive impact on endangered species",
+      "value": null,
+      "unit": null,
+      "year": 2025,
+      "category": "Environmental"
+    },
+    {
+      "metric_name": "Biodiversity conservation programs implemented in biodiversity hotspots",
+      "value": null,
+      "unit": null,
+      "year": 2025,
+      "category": "Environmental"
+    },
+    {
+      "metric_name": "Deforestation",
+      "value": 0,
+      "unit": "%",
+      "year": 2030,
+      "category": "Environmental"
+    },
+    {
+      "metric_name": "Sustainable use of forest-based resources",
+      "value": 100,
+      "unit": "%",
+      "year": 2030,
+      "category": "Environmental"
+    },
+    {
+      "metric_name": "Plastics circular economy projects per country with manufacturing operations",
+      "value": 3,
+      "unit": "projects",
+      "year": 2025,
+      "category": "Environmental"
+    },
+    {
+      "metric_name": "Absolute Scopes 1 and 2 GHG emissions reduction",
+      "value": 28,
+      "unit": "%",
+      "year": 2030,
+      "category": "Environmental"
+    },
+    {
+      "metric_name": "Absolute Scope 3 GHG emissions reduction",
+      "value": 15,
+      "unit": "%",
+      "year": 2030,
+      "category": "Environmental"
+    },
+    {
+      "metric_name": "Water use intensity reduction in high-stress geographies",
+      "value": 30,
+      "unit": "%",
+      "year": 2030,
+      "category": "Environmental"
+    },
+    {
+      "metric_name": "Avoidance of waste to landfill",
+      "value": 100,
+      "unit": "%",
+      "year": 2030,
+      "category": "Environmental"
+    },
+    {
+      "metric_name": "COD or BOD reduction from wastewater discharge",
+      "value": 10,
+      "unit": "%",
+      "year": 2030,
+      "category": "Environmental"
+    },
+    {
+      "metric_name": "Product or supply chain initiatives for plant-based or alternative proteins",
+      "value": 5,
+      "unit": "initiatives",
+      "year": 2025,
+      "category": "Environmental"
+    },
+    {
+      "metric_name": "Projects to minimize food waste in supply chain",
+      "value": 5,
+      "unit": "projects",
+      "year": 2025,
+      "category": "Environmental"
+    },
+    {
+      "metric_name": "Projects to minimize food waste in supply chain",
+      "value": 5,
+      "unit": "projects",
+      "year": 2025,
+      "category": "Environmental"
+    },
+    {
+      "metric_name": "Applicable geographies with agricultural efficiency initiatives for smallholder farmers",
+      "value": 100,
+      "unit": "%",
+      "year": 2027,
+      "category": "Social"
+    },
+    {
+      "metric_name": "Global waxy corn supply sustainably sourced",
+      "value": 100,
+      "unit": "%",
+      "year": 2022,
+      "category": "Environmental"
+    },
+    {
+      "metric_name": "Tier 1 priority crops sustainably sourced",
+      "value": 100,
+      "unit": "%",
+      "year": 2025,
+      "category": "Environmental"
+    },
+    {
+      "metric_name": "Extremely high water-stressed sourcing geographies with water conservation projects",
+      "value": 100,
+      "unit": "%",
+      "year": 2025,
+      "category": "Environmental"
+    },
+    {
+      "metric_name": "Agricultural supply not using pesticides of concern",
+      "value": 100,
+      "unit": "%",
+      "year": 2025,
+      "category": "Environmental"
+    },
+    {
+      "metric_name": "Agricultural supply chain with integrated pest management or grower education",
+      "value": 70,
+      "unit": "%",
+      "year": 2027,
+      "category": "Environmental"
+    },
+    {
+      "metric_name": "Tier 1 and 2 priority crops sustainably sourced",
+      "value": 100,
+      "unit": "%",
+      "year": 2030,
+      "category": "Environmental"
+    },
+    {
+      "metric_name": "Countries with measurable community impact",
+      "value": 10,
+      "unit": "countries",
+      "year": 2028,
+      "category": "Social"
+    },
+    {
+      "metric_name": "Average volunteer time per employee",
+      "value": 2,
+      "unit": "hours",
+      "year": 2030,
+      "category": "Social"
+    },
+    {
+      "metric_name": "Community impact projects (vs 2025 baseline)",
+      "value": 2,
+      "unit": "x baseline",
+      "year": 2030,
+      "category": "Social"
+    }
+  ],
+  "dataQuality": {
+    "score": 85,
+    "warnings": [],
+    "missingRequiredMetrics": [],
+    "metricDetails": []
+  },
+  "insights": [
+    {
+      "id": "1",
+      "title": "Report Successfully Extracted",
+      "description": "ESG metrics have been successfully extracted from Ingredion 2024 Sustainability Report 10 pages's 2025 report",
+      "category": "General",
+      "severity": "positive",
+      "tags": [
+        "extraction",
+        "complete"
+      ],
+      "generatedAt": "2025-12-09T16:19:02.207Z"
+    }
+  ]
+}
