@@ -4,12 +4,8 @@ import { useState } from "react"
 import Sidebar from "@/components/sidebar"
 import TopNav from "@/components/top-nav"
 import Dashboard from "@/components/pages/dashboard"
-import TargetAnalyzer from "@/components/pages/target-analyzer"
 import CompetitiveIntelligence from "@/components/pages/competitive-intelligence"
-import Materiality from "@/components/pages/materiality"
-import FrameworkReadiness from "@/components/pages/framework-readiness"
 import DataQuality from "@/components/pages/data-quality"
-import Scenarios from "@/components/pages/scenarios"
 import Insights from "@/components/pages/insights"
 import Admin from "@/components/pages/admin"
 
@@ -27,18 +23,10 @@ export default function Home() {
     switch (currentPage) {
       case "dashboard":
         return <Dashboard company={company} />
-      case "targets":
-        return <TargetAnalyzer company={company} />
       case "compare":
         return <CompetitiveIntelligence company={company} />
-      case "materiality":
-        return <Materiality company={company} />
-      case "frameworks":
-        return <FrameworkReadiness company={company} />
       case "data-quality":
         return <DataQuality company={company} />
-      case "scenarios":
-        return <Scenarios company={company} />
       case "insights":
         return <Insights company={company} />
       case "admin":

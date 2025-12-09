@@ -1,14 +1,10 @@
 "use client"
-import { BarChart3, Target, TrendingUp, Grid, Layers, Activity, Zap, Lightbulb, Settings } from "lucide-react"
+import { BarChart3, TrendingUp, Activity, Lightbulb, Settings } from "lucide-react"
 
 const menuItems = [
   { id: "dashboard", label: "Dashboard", icon: BarChart3 },
-  { id: "targets", label: "Targets", icon: Target },
   { id: "compare", label: "Compare", icon: TrendingUp },
-  { id: "materiality", label: "Materiality", icon: Grid },
-  { id: "frameworks", label: "Frameworks", icon: Layers },
   { id: "data-quality", label: "Data Quality", icon: Activity },
-  { id: "scenarios", label: "Scenarios", icon: Zap },
   { id: "insights", label: "Insights", icon: Lightbulb },
   { id: "admin", label: "Admin", icon: Settings },
 ]

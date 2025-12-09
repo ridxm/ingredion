@@ -1,196 +1,373 @@
 "use client"
 
-import { useState } from "react"
+import { useState, useEffect } from "react"
+import { Loader2, Check, X } from "lucide-react"
 import {
-  RadarChart,
-  Radar,
   BarChart,
   Bar,
   XAxis,
   YAxis,
   CartesianGrid,
-  Legend,
+  Tooltip,
   ResponsiveContainer,
+  Legend,
+  RadarChart,
+  Radar,
   PolarGrid,
   PolarAngleAxis,
   PolarRadiusAxis,
 } from "recharts"
 
-const radarData = [
-  { metric: "Emissions", Ingredion: 85, ADM: 65, Cargill: 60, "Tate & Lyle": 75 },
-  { metric: "Water", Ingredion: 78, ADM: 72, Cargill: 68, "Tate & Lyle": 75 },
-  { metric: "Energy", Ingredion: 88, ADM: 70, Cargill: 72, "Tate & Lyle": 80 },
-  { metric: "Waste", Ingredion: 75, ADM: 68, Cargill: 72, "Tate & Lyle": 70 },
-  { metric: "Framework", Ingredion: 92, ADM: 78, Cargill: 85, "Tate & Lyle": 88 },
-]
+interface CompanyData {
+  company: string
+  year: number
+  metrics: Record<string, number>
+}
 
-const rankingData = [
-  { company: "Ingredion", score: 84 },
-  { company: "Tate & Lyle", score: 78 },
-  { company: "Cargill", score: 74 },
-  { company: "ADM", score: 71 },
-  { company: "BASF", score: 65 },
-]
+const CHART_COLORS = ["#4ADE80", "#60A5FA", "#F472B6", "#FBBF24", "#A78BFA", "#34D399"]
 
-export default function CompetitiveIntelligence({ company }) {
-  const [selectedCompanies, setSelectedCompanies] = useState(["Ingredion", "ADM", "Cargill"])
-  const [metric, setMetric] = useState("emissions-intensity")
+const METRIC_LABELS: Record<string, string> = {
+  carbonReductionPct: "Carbon Reduction %",
+  totalEmissions: "Total Emissions",
+  scope1: "Scope 1",
+  scope2: "Scope 2",
+  scope3: "Scope 3",
+  renewableElectricity: "Renewable Energy %",
+  waterWithdrawal: "Water Use",
+  wasteLandfillAvoidance: "Waste Diverted %",
+  totalWaste: "Total Waste",
+  trir: "Safety (TRIR)",
+  zeroInjuryFacilities: "Zero Injury %",
+  sustainableSourcing: "Sustainable Sourcing %",
+  sustainableAgriculture: "Sustainable Agriculture",
+  womenBoard: "Women on Board %",
+  boardIndependence: "Board Independence %",
+}
+
+function formatValue(value: number): string {
+  if (value >= 1000000) return (value / 1000000).toFixed(1) + "M"
+  if (value >= 1000) return (value / 1000).toFixed(1) + "K"
+  return value.toLocaleString()
+}
+
+export default function CompetitiveIntelligence({ company }: { company: string }) {
+  const [availableCompanies, setAvailableCompanies] = useState<string[]>([])
+  const [selectedCompanies, setSelectedCompanies] = useState<string[]>([])
+  const [companyData, setCompanyData] = useState<CompanyData[]>([])
+  const [loading, setLoading] = useState(true)
+  const [selectedMetric, setSelectedMetric] = useState("carbonReductionPct")
+
+  // Load available companies
+  useEffect(() => {
+    async function loadCompanies() {
+      try {
+        const response = await fetch("/api/data?endpoint=companies")
+        if (response.ok) {
+          const data = await response.json()
+          if (data.companies && data.companies.length > 0) {
+            setAvailableCompanies(data.companies)
+            // Default select all companies (up to 5)
+            setSelectedCompanies(data.companies.slice(0, 5))
+          }
+        }
+      } catch (error) {
+        console.error("Error loading companies:", error)
+      } finally {
+        setLoading(false)
+      }
+    }
+    loadCompanies()
+  }, [])
+
+  // Fetch data for selected companies
+  useEffect(() => {
+    async function fetchCompanyData() {
+      if (selectedCompanies.length === 0) {
+        setCompanyData([])
+        return
+      }
+
+      const dataPromises = selectedCompanies.map(async (companyName) => {
+        try {
+          const response = await fetch(
+            `/api/data?company=${encodeURIComponent(companyName)}&endpoint=dashboard`
+          )
+          if (response.ok) {
+            const data = await response.json()
+            return {
+              company: companyName,
+              year: data.year,
+              metrics: data.metrics || {},
+            }
+          }
+        } catch (error) {
+          console.error(`Error fetching data for ${companyName}:`, error)
+        }
+        return null
+      })
+
+      const results = await Promise.all(dataPromises)
+      setCompanyData(results.filter((r): r is CompanyData => r !== null))
+    }
+
+    fetchCompanyData()
+  }, [selectedCompanies])
+
+  const toggleCompany = (companyName: string) => {
+    setSelectedCompanies((prev) =>
+      prev.includes(companyName)
+        ? prev.filter((c) => c !== companyName)
+        : [...prev, companyName]
+    )
+  }
+
+  // Build comparison bar chart data
+  const buildBarChartData = (metricKey: string) => {
+    return companyData
+      .filter((d) => d.metrics[metricKey] !== undefined)
+      .map((d) => ({
+        company: d.company,
+        value: d.metrics[metricKey],
+      }))
+      .sort((a, b) => b.value - a.value)
+  }
+
+  // Build radar chart data for multiple metrics
+  const buildRadarData = () => {
+    const radarMetrics = [
+      "carbonReductionPct",
+      "renewableElectricity",
+      "wasteLandfillAvoidance",
+      "sustainableSourcing",
+      "zeroInjuryFacilities",
+    ]
+
+    return radarMetrics.map((metric) => {
+      const point: any = { metric: METRIC_LABELS[metric] || metric }
+      companyData.forEach((d) => {
+        point[d.company] = d.metrics[metric] || 0
+      })
+      return point
+    })
+  }
+
+  // Build comparison table data
+  const buildTableData = () => {
+    const allMetrics = new Set<string>()
+    companyData.forEach((d) => {
+      Object.keys(d.metrics).forEach((m) => allMetrics.add(m))
+    })
+
+    return Array.from(allMetrics)
+      .filter((m) => METRIC_LABELS[m])
+      .map((metric) => ({
+        metric,
+        label: METRIC_LABELS[metric],
+        values: companyData.map((d) => ({
+          company: d.company,
+          value: d.metrics[metric],
+        })),
+      }))
+  }
+
+  if (loading) {
+    return (
+      <div className="p-6 bg-[#050506] min-h-screen flex items-center justify-center">
+        <div className="text-center">
+          <Loader2 className="w-8 h-8 text-[#A0A3AA] animate-spin mx-auto mb-4" />
+          <p className="text-sm text-[#A0A3AA]">Loading companies...</p>
+        </div>
+      </div>
+    )
+  }
+
+  if (availableCompanies.length === 0) {
+    return (
+      <div className="p-6 bg-[#050506] min-h-screen">
+        <h1 className="text-3xl font-semibold text-[#F5F5F6] tracking-tight mb-4">Compare</h1>
+        <div className="bg-[#0F1012] border border-[rgba(255,255,255,0.06)] rounded-md p-8 text-center">
+          <p className="text-sm text-[#A0A3AA] mb-2">No companies available for comparison</p>
+          <p className="text-xs text-[#6B6E76]">Upload sustainability reports in the Admin page to get started</p>
+        </div>
+      </div>
+    )
+  }
+
+  const barChartData = buildBarChartData(selectedMetric)
+  const radarData = buildRadarData()
+  const tableData = buildTableData()
 
   return (
-    <div className="p-8 space-y-8 bg-background">
+    <div className="p-6 space-y-6 bg-[#050506] min-h-screen">
       <div>
-        <h1 className="text-3xl font-bold text-foreground mb-2">Competitive Intelligence</h1>
-        <p className="text-muted-foreground">Compare {company} against peers</p>
+        <h1 className="text-3xl font-semibold text-[#F5F5F6] tracking-tight">Compare</h1>
+        <p className="text-sm text-[#A0A3AA] mt-1">
+          Compare ESG metrics across {availableCompanies.length} uploaded companies
+        </p>
       </div>
 
-      {/* Filters */}
-      <div className="glass p-6 rounded-lg border border-border/20 flex gap-6">
-        <div className="flex-1">
-          <label className="block text-sm font-medium text-foreground mb-2">Companies</label>
-          <div className="flex gap-2 flex-wrap">
-            {["Ingredion", "ADM", "Cargill", "Tate & Lyle", "BASF"].map((c) => (
-              <label key={c} className="flex items-center gap-2 cursor-pointer">
-                <input
-                  type="checkbox"
-                  checked={selectedCompanies.includes(c)}
-                  onChange={() =>
-                    setSelectedCompanies(
-                      selectedCompanies.includes(c)
-                        ? selectedCompanies.filter((x) => x !== c)
-                        : [...selectedCompanies, c],
-                    )
-                  }
-                  className="rounded border-border"
-                />
-                <span className="text-sm text-foreground">{c}</span>
-              </label>
-            ))}
-          </div>
+      {/* Company Selection */}
+      <div className="bg-[#0F1012] border border-[rgba(255,255,255,0.06)] rounded-md p-4">
+        <h2 className="text-sm font-semibold text-[#F5F5F6] mb-3">Select Companies to Compare</h2>
+        <div className="flex flex-wrap gap-2">
+          {availableCompanies.map((c) => {
+            const isSelected = selectedCompanies.includes(c)
+            return (
+              <button
+                key={c}
+                onClick={() => toggleCompany(c)}
+                className={`px-3 py-2 rounded-md text-sm font-medium transition-all flex items-center gap-2 ${
+                  isSelected
+                    ? "bg-green-500/20 border border-green-500/50 text-green-400"
+                    : "bg-[#141518] border border-[rgba(255,255,255,0.06)] text-[#A0A3AA] hover:text-[#F5F5F6] hover:border-[rgba(255,255,255,0.12)]"
+                }`}
+              >
+                {isSelected ? <Check className="w-4 h-4" /> : null}
+                {c}
+              </button>
+            )
+          })}
         </div>
-        <div className="flex-1">
-          <label className="block text-sm font-medium text-foreground mb-2">Metric</label>
-          <select
-            value={metric}
-            onChange={(e) => setMetric(e.target.value)}
-            className="w-full px-3 py-2 bg-secondary border border-border rounded-lg text-sm text-foreground focus:outline-none focus:ring-1 focus:ring-primary"
-          >
-            <option value="emissions-intensity">Emissions Intensity</option>
-            <option value="renewable-energy">Renewable Energy %</option>
-            <option value="water-efficiency">Water Efficiency</option>
-          </select>
-        </div>
+        {selectedCompanies.length === 0 && (
+          <p className="text-xs text-[#6B6E76] mt-2">Select at least one company to view comparisons</p>
+        )}
       </div>
 
-      <div className="grid grid-cols-2 gap-6">
-        {/* Radar Chart */}
-        <div className="glass p-6 rounded-lg border border-border/20">
-          <h2 className="text-lg font-semibold text-foreground mb-4">Performance Radar</h2>
-          <ResponsiveContainer width="100%" height={300}>
-            <RadarChart data={radarData}>
-              <PolarGrid stroke="rgba(255,255,255,0.1)" />
-              <PolarAngleAxis dataKey="metric" stroke="rgba(255,255,255,0.5)" tick={{ fontSize: 11 }} />
-              <PolarRadiusAxis angle={90} domain={[0, 100]} stroke="rgba(255,255,255,0.5)" />
-              <Radar name="Ingredion" dataKey="Ingredion" stroke="#4ADE80" fill="#4ADE80" fillOpacity={0.2} />
-              <Radar name="ADM" dataKey="ADM" stroke="#60A5FA" fill="#60A5FA" fillOpacity={0.1} />
-              <Legend />
-            </RadarChart>
-          </ResponsiveContainer>
-        </div>
-
-        {/* Ranking */}
-        <div className="glass p-6 rounded-lg border border-border/20">
-          <h2 className="text-lg font-semibold text-foreground mb-4">Overall Ranking</h2>
-          <ResponsiveContainer width="100%" height={300}>
-            <BarChart data={rankingData} layout="vertical">
-              <CartesianGrid strokeDasharray="3 3" stroke="rgba(255,255,255,0.1)" horizontal={false} />
-              <XAxis type="number" stroke="rgba(255,255,255,0.5)" />
-              <YAxis
-                dataKey="company"
-                type="category"
-                stroke="rgba(255,255,255,0.5)"
-                width={80}
-                tick={{ fontSize: 12 }}
-              />
-              <Bar dataKey="score" fill="#4ADE80" />
-            </BarChart>
-          </ResponsiveContainer>
-        </div>
-      </div>
-
-      {/* Peer Delta Cards */}
-      <div className="grid grid-cols-3 gap-4">
-        {[
-          { metric: "Emissions Intensity", delta: "-22%", label: "vs Peer Median" },
-          { metric: "Renewable Energy", delta: "+8%", label: "vs Peer Median" },
-          { metric: "Water Efficiency", delta: "-5%", label: "vs Peer Median" },
-        ].map((item, i) => (
-          <div key={i} className="glass p-4 rounded-lg border border-border/20">
-            <p className="text-sm text-muted-foreground mb-1">{item.metric}</p>
-            <p className="text-2xl font-bold text-primary mb-1">{item.delta}</p>
-            <p className="text-xs text-muted-foreground">{item.label}</p>
-          </div>
-        ))}
-      </div>
-
-      {/* Leaderboards */}
-      <div className="grid grid-cols-2 gap-6">
-        <div className="glass p-6 rounded-lg border border-border/20">
-          <h2 className="text-lg font-semibold text-foreground mb-4">Lowest Emissions Intensity</h2>
-          <div className="space-y-2">
-            {rankingData.map((r, i) => (
-              <div key={i} className="flex items-center justify-between p-3 bg-secondary/20 rounded-lg">
-                <span className="font-medium text-foreground">
-                  {i + 1}. {r.company}
-                </span>
-                <span className="text-sm text-primary font-bold">{r.score}</span>
+      {selectedCompanies.length > 0 && companyData.length > 0 && (
+        <>
+          {/* Metric Selector + Bar Chart */}
+          <div className="grid grid-cols-3 gap-4">
+            <div className="col-span-2 bg-[#0F1012] border border-[rgba(255,255,255,0.06)] rounded-md p-4">
+              <div className="flex items-center justify-between mb-4">
+                <h2 className="text-sm font-semibold text-[#F5F5F6]">Metric Comparison</h2>
+                <select
+                  value={selectedMetric}
+                  onChange={(e) => setSelectedMetric(e.target.value)}
+                  className="px-3 py-1.5 bg-[#141518] border border-[rgba(255,255,255,0.1)] rounded-md text-sm text-[#F5F5F6] focus:outline-none"
+                >
+                  {Object.entries(METRIC_LABELS).map(([key, label]) => (
+                    <option key={key} value={key}>
+                      {label}
+                    </option>
+                  ))}
+                </select>
               </div>
-            ))}
-          </div>
-        </div>
+              {barChartData.length > 0 ? (
+                <ResponsiveContainer width="100%" height={300}>
+                  <BarChart data={barChartData} layout="vertical" margin={{ top: 5, right: 30, left: 100, bottom: 5 }}>
+                    <CartesianGrid strokeDasharray="3 3" stroke="rgba(255,255,255,0.05)" horizontal={false} />
+                    <XAxis type="number" stroke="rgba(255,255,255,0.3)" tick={{ fontSize: 11 }} tickFormatter={formatValue} />
+                    <YAxis dataKey="company" type="category" stroke="rgba(255,255,255,0.3)" tick={{ fontSize: 12 }} width={90} />
+                    <Tooltip
+                      contentStyle={{ backgroundColor: "#141518", border: "1px solid rgba(255,255,255,0.1)", borderRadius: "6px" }}
+                      labelStyle={{ color: "#F5F5F6" }}
+                      formatter={(value: number) => [formatValue(value), METRIC_LABELS[selectedMetric]]}
+                    />
+                    <Bar dataKey="value" fill="#4ADE80" radius={[0, 4, 4, 0]} />
+                  </BarChart>
+                </ResponsiveContainer>
+              ) : (
+                <div className="h-72 flex items-center justify-center text-sm text-[#6B6E76]">
+                  No data for this metric
+                </div>
+              )}
+            </div>
 
-        <div className="glass p-6 rounded-lg border border-border/20">
-          <h2 className="text-lg font-semibold text-foreground mb-4">Best Water Efficiency</h2>
-          <div className="space-y-2">
-            {rankingData.map((r, i) => (
-              <div key={i} className="flex items-center justify-between p-3 bg-secondary/20 rounded-lg">
-                <span className="font-medium text-foreground">
-                  {i + 1}. {r.company}
-                </span>
-                <span className="text-sm text-primary font-bold">{r.score}</span>
+            {/* Summary Stats */}
+            <div className="bg-[#0F1012] border border-[rgba(255,255,255,0.06)] rounded-md p-4">
+              <h2 className="text-sm font-semibold text-[#F5F5F6] mb-4">Summary</h2>
+              <div className="space-y-3">
+                <div className="p-3 bg-[#141518] rounded-md">
+                  <p className="text-xs text-[#6B6E76] mb-1">Companies Selected</p>
+                  <p className="text-xl font-bold text-[#F5F5F6]">{selectedCompanies.length}</p>
+                </div>
+                <div className="p-3 bg-[#141518] rounded-md">
+                  <p className="text-xs text-[#6B6E76] mb-1">With Data</p>
+                  <p className="text-xl font-bold text-green-400">{companyData.length}</p>
+                </div>
+                {barChartData.length > 0 && (
+                  <>
+                    <div className="p-3 bg-[#141518] rounded-md">
+                      <p className="text-xs text-[#6B6E76] mb-1">Highest ({METRIC_LABELS[selectedMetric]})</p>
+                      <p className="text-sm font-medium text-green-400">{barChartData[0]?.company}</p>
+                      <p className="text-xs text-[#A0A3AA]">{formatValue(barChartData[0]?.value || 0)}</p>
+                    </div>
+                    <div className="p-3 bg-[#141518] rounded-md">
+                      <p className="text-xs text-[#6B6E76] mb-1">Lowest</p>
+                      <p className="text-sm font-medium text-red-400">{barChartData[barChartData.length - 1]?.company}</p>
+                      <p className="text-xs text-[#A0A3AA]">{formatValue(barChartData[barChartData.length - 1]?.value || 0)}</p>
+                    </div>
+                  </>
+                )}
               </div>
-            ))}
+            </div>
           </div>
-        </div>
-      </div>
 
-      {/* Raw Values Table */}
-      <div className="glass p-6 rounded-lg border border-border/20">
-        <h2 className="text-lg font-semibold text-foreground mb-4">Raw Data Values</h2>
-        <div className="overflow-x-auto">
-          <table className="w-full text-sm">
-            <thead>
-              <tr className="border-b border-border/30">
-                <th className="px-4 py-3 text-left text-muted-foreground font-medium">Company</th>
-                <th className="px-4 py-3 text-left text-muted-foreground font-medium">Emissions</th>
-                <th className="px-4 py-3 text-left text-muted-foreground font-medium">Energy</th>
-                <th className="px-4 py-3 text-left text-muted-foreground font-medium">Water</th>
-                <th className="px-4 py-3 text-left text-muted-foreground font-medium">Framework</th>
-              </tr>
-            </thead>
-            <tbody>
-              {["Ingredion", "ADM", "Cargill", "Tate & Lyle", "BASF"].map((c, i) => (
-                <tr key={c} className="border-b border-border/10 hover:bg-secondary/20">
-                  <td className="px-4 py-3 text-foreground font-medium">{c}</td>
-                  <td className="px-4 py-3 text-foreground">340</td>
-                  <td className="px-4 py-3 text-foreground">62%</td>
-                  <td className="px-4 py-3 text-foreground">2.8</td>
-                  <td className="px-4 py-3 text-foreground">92%</td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
+          {/* Radar Chart - Performance Overview */}
+          {companyData.length >= 2 && radarData.some((d) => Object.keys(d).length > 1) && (
+            <div className="bg-[#0F1012] border border-[rgba(255,255,255,0.06)] rounded-md p-4">
+              <h2 className="text-sm font-semibold text-[#F5F5F6] mb-4">Performance Radar (% Metrics)</h2>
+              <ResponsiveContainer width="100%" height={350}>
+                <RadarChart data={radarData}>
+                  <PolarGrid stroke="rgba(255,255,255,0.1)" />
+                  <PolarAngleAxis dataKey="metric" stroke="rgba(255,255,255,0.5)" tick={{ fontSize: 10 }} />
+                  <PolarRadiusAxis angle={90} domain={[0, 100]} stroke="rgba(255,255,255,0.3)" tick={{ fontSize: 9 }} />
+                  {companyData.slice(0, 5).map((d, i) => (
+                    <Radar
+                      key={d.company}
+                      name={d.company}
+                      dataKey={d.company}
+                      stroke={CHART_COLORS[i % CHART_COLORS.length]}
+                      fill={CHART_COLORS[i % CHART_COLORS.length]}
+                      fillOpacity={0.15}
+                      strokeWidth={2}
+                    />
+                  ))}
+                  <Legend />
+                </RadarChart>
+              </ResponsiveContainer>
+            </div>
+          )}
+
+          {/* Data Table */}
+          <div className="bg-[#0F1012] border border-[rgba(255,255,255,0.06)] rounded-md p-4">
+            <h2 className="text-sm font-semibold text-[#F5F5F6] mb-4">All Metrics Comparison</h2>
+            <div className="overflow-x-auto">
+              <table className="w-full text-sm">
+                <thead>
+                  <tr className="border-b border-[rgba(255,255,255,0.06)]">
+                    <th className="px-4 py-3 text-left text-[#6B6E76] font-medium">Metric</th>
+                    {companyData.map((d) => (
+                      <th key={d.company} className="px-4 py-3 text-left text-[#F5F5F6] font-medium">
+                        {d.company}
+                      </th>
+                    ))}
+                  </tr>
+                </thead>
+                <tbody>
+                  {tableData.map((row) => (
+                    <tr key={row.metric} className="border-b border-[rgba(255,255,255,0.03)] hover:bg-[#141518]">
+                      <td className="px-4 py-3 text-[#A0A3AA]">{row.label}</td>
+                      {row.values.map((v) => (
+                        <td key={v.company} className="px-4 py-3 text-[#F5F5F6] font-medium">
+                          {v.value !== undefined ? formatValue(v.value) : "—"}
+                        </td>
+                      ))}
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </>
+      )}
+
+      {selectedCompanies.length > 0 && companyData.length === 0 && (
+        <div className="bg-[#0F1012] border border-[rgba(255,255,255,0.06)] rounded-md p-8 text-center">
+          <Loader2 className="w-6 h-6 text-[#A0A3AA] animate-spin mx-auto mb-2" />
+          <p className="text-sm text-[#A0A3AA]">Loading comparison data...</p>
         </div>
-      </div>
+      )}
     </div>
   )
 }

@@ -1,5 +1,7 @@
 import OpenAI from "openai"
 import { readFile } from "fs/promises"
+import { spawn } from "child_process"
+import { join } from "path"
 import type { ESGReport } from "./types"
 import { normalizeMetrics, getMetricDefinitionsForPrompt, type RawMetric } from "./metric-normalizer"
 import { validateExtractedData, detectHallucination } from "./extraction-validator"
@@ -14,10 +16,10 @@ const openai = new OpenAI({
  */
 export async function extractPDFData(filepath: string, filename: string): Promise<ESGReport> {
   try {
-    // Extract text using a PDF library (you'll need to install pdf-parse)
+    // Extract text from PDF
     const pdfText = await extractTextFromPDF(filepath)
 
-    // Use OpenAI to extract structured data from the text
+    // Use OpenAI to extract structured data - comprehensive extraction
     const rawData = await extractStructuredData(pdfText, filename)
 
     // Normalize metrics to standard units
@@ -69,162 +71,269 @@ export async function extractPDFData(filepath: string, filename: string): Promis
 }
 
 /**
- * Extract text from PDF using pdfjs-dist
+ * Extract text from PDF using Python PyPDF2
  */
 async function extractTextFromPDF(filepath: string): Promise<string> {
-  try {
-    // Use dynamic require for pdfjs-dist
-    // @ts-ignore
-    const pdfjsLib = require("pdfjs-dist/legacy/build/pdf.js")
-    
-    const dataBuffer = await readFile(filepath)
-    const typedArray = new Uint8Array(dataBuffer)
-    
-    // Load the PDF document
-    const loadingTask = pdfjsLib.getDocument({
-      data: typedArray,
-      useSystemFonts: true,
+  return new Promise((resolve, reject) => {
+    const pythonScript = join(process.cwd(), "python_extractor", "pdf_text_extractor.py")
+    const venvPython = join(process.cwd(), "python_extractor", "venv", "bin", "python3")
+
+    const pythonProcess = spawn(venvPython, [pythonScript, filepath], {
+      cwd: join(process.cwd(), "python_extractor"),
     })
-    
-    const pdf = await loadingTask.promise
-    let fullText = ""
-    
-    // Extract text from each page
-    for (let pageNum = 1; pageNum <= pdf.numPages; pageNum++) {
-      const page = await pdf.getPage(pageNum)
-      const textContent = await page.getTextContent()
-      const pageText = textContent.items
-        .map((item: any) => item.str)
-        .join(" ")
-      fullText += pageText + "\n"
-    }
-    
-    console.log(`Extracted ${fullText.length} characters from ${pdf.numPages} pages`)
-    return fullText
-  } catch (error) {
-    console.error("Error parsing PDF with pdfjs-dist:", error)
-    return ""
-  }
+
+    let stdout = ""
+    let stderr = ""
+
+    pythonProcess.stdout.on("data", (data) => {
+      stdout += data.toString()
+    })
+
+    pythonProcess.stderr.on("data", (data) => {
+      stderr += data.toString()
+      console.error("[Python PDF]", data.toString())
+    })
+
+    pythonProcess.on("close", (code) => {
+      if (code !== 0) {
+        console.error("Python PDF extractor failed with code:", code)
+        resolve("")
+        return
+      }
+
+      try {
+        const result = JSON.parse(stdout)
+        if (result.success) {
+          console.log(`Extracted ${result.text_length} characters from ${result.num_pages} pages`)
+          resolve(result.text)
+        } else {
+          console.error("PDF extraction failed:", result.error)
+          resolve("")
+        }
+      } catch (error) {
+        console.error("Failed to parse Python output:", stdout)
+        resolve("")
+      }
+    })
+
+    pythonProcess.on("error", (error) => {
+      console.error("Failed to spawn Python process:", error.message)
+      resolve("")
+    })
+  })
 }
 
 /**
- * Use OpenAI to extract structured ESG data from text with unit detection
+ * COMPREHENSIVE ESG data extraction using OpenAI
  */
 async function extractStructuredData(text: string, filename: string): Promise<any> {
-  const metricDefinitions = getMetricDefinitionsForPrompt()
-  
-  // Check if we actually have text to extract from
   if (!text || text.trim().length < 100) {
     console.error("PDF text is empty or too short. Text length:", text.length)
     throw new Error("Could not extract sufficient text from PDF. The file may be image-based or corrupted.")
   }
 
-  console.log("Extracting from PDF text. First 500 chars:", text.substring(0, 500))
+  console.log(`Extracting from ${text.length} characters of PDF text`)
   
-  const prompt = `You are an expert ESG data analyst. Extract ONLY the data that is ACTUALLY PRESENT in the following sustainability report.
+  // Use more text - up to 100K characters for comprehensive extraction
+  const textToAnalyze = text.slice(0, 100000)
+  
+  const comprehensivePrompt = `You are an expert ESG/sustainability data analyst. Your task is to extract ALL quantitative sustainability metrics from this report.
 
-CRITICAL RULES:
-1. DO NOT make up or estimate any data
-2. DO NOT use placeholder or example values
-3. If you cannot find a metric in the text, OMIT it entirely
-4. The company name MUST be the exact name from the report
-5. Only extract metrics that are explicitly stated with numbers
-6. Include the exact unit as written in the report
+IMPORTANT: Search the ENTIRE text thoroughly. Look for numbers with units in:
+- Data tables
+- Performance summaries
+- Infographics text
+- Footnotes
+- Year-over-year comparisons
 
-Standard Metrics to Extract (ONLY if present):
-${metricDefinitions}
+═══════════════════════════════════════════════════════════════
+METRICS TO EXTRACT (find ALL that are present):
+═══════════════════════════════════════════════════════════════
 
-Return ONLY valid JSON in this EXACT format:
+📊 EMISSIONS & CARBON:
+- Carbon/GHG reduction percentage (e.g., "22% reduction", "reduced by 22%")
+- Total carbon emissions in metric tons (Scope 1+2 combined)
+- Scope 1 emissions (direct) in metric tons
+- Scope 2 emissions (electricity) in metric tons  
+- Scope 3 emissions (value chain) in metric tons
+- Scope 3 reduction percentage
+- Carbon intensity (emissions per unit/revenue)
+
+⚡ ENERGY:
+- Total energy consumption (GWh, MWh, TJ, GJ)
+- Renewable electricity percentage (look for "X% renewable", "X% clean energy")
+- Solar/wind capacity (MW)
+- Energy intensity
+
+💧 WATER:
+- Total water withdrawal/use (cubic meters, gallons, liters)
+- Water recycled/reused percentage
+- Water intensity (per unit production)
+- Water discharge
+
+♻️ WASTE:
+- Total waste generated (metric tons)
+- Waste diverted from landfill percentage (look for "X% diversion", "X% avoidance")
+- Waste recycled percentage
+- Hazardous waste (metric tons)
+- Food waste (metric tons)
+
+📦 PACKAGING:
+- Recyclable packaging percentage
+- Recycled content percentage (PCR, rPET)
+- Plastic reduction percentage
+- Reusable packaging percentage
+
+🌾 AGRICULTURE & SOURCING:
+- Sustainable/regenerative agriculture (acres, hectares)
+- Sustainably sourced ingredients percentage
+- Deforestation-free percentage
+
+🦺 SAFETY:
+- TRIR / Total Recordable Incident Rate (per 200,000 hours)
+- LTIR / Lost Time Injury Rate
+- Facilities with zero injuries percentage
+- Fatalities (should be 0 ideally)
+
+👥 WORKFORCE:
+- Total employees / headcount
+- Employee turnover rate percentage
+- New hires
+- Employee engagement score
+
+🌈 DIVERSITY:
+- Women in workforce percentage
+- Women in leadership/management percentage
+- Women on board percentage
+- Ethnic/racial diversity percentage
+
+📚 TRAINING:
+- Training hours per employee
+- Training investment (USD)
+
+🤝 COMMUNITY:
+- Community investment (USD, millions)
+- Volunteer hours
+- People benefited
+
+🔗 SUPPLY CHAIN:
+- Supplier audits conducted
+- Supplier compliance rate
+- Local sourcing percentage
+
+⚖️ GOVERNANCE:
+- Board independence percentage
+- CEO pay ratio
+- Ethics training completion percentage
+
+═══════════════════════════════════════════════════════════════
+EXTRACTION RULES:
+═══════════════════════════════════════════════════════════════
+
+1. ONLY extract values that are EXPLICITLY stated with numbers
+2. DO NOT guess, estimate, or make up any values
+3. Include the EXACT unit as written in the report
+4. For percentages found as decimals (0.22), convert to % (22%)
+5. Pay attention to scale: thousands, millions, etc.
+6. Look for CURRENT YEAR data (most recent, typically 2024 or 2023)
+7. If a metric appears multiple times, use the one with more context
+8. Set confidence: 0.95 if very clear, 0.85 if clear, 0.75 if somewhat clear
+
+═══════════════════════════════════════════════════════════════
+OUTPUT FORMAT (valid JSON only):
+═══════════════════════════════════════════════════════════════
+
 {
-  "company": "Company Name",
+  "company": "Exact Company Name from Report",
   "year": 2024,
-  "reportDate": "2024-01-01",
-  "reportUrl": "${filename}",
   "rawMetrics": [
-    {
-      "name": "scope1",
-      "value": 100,
-      "unit": "kt CO2e",
-      "confidence": 0.9
-    },
-    {
-      "name": "renewable energy",
-      "value": 62,
-      "unit": "%",
-      "confidence": 0.85
-    }
+    {"name": "carbonReductionPct", "value": 22, "unit": "%", "confidence": 0.95},
+    {"name": "carbonAbsolute", "value": 2604910, "unit": "metric tons CO2e", "confidence": 0.9},
+    {"name": "scope1", "value": 500000, "unit": "metric tons CO2e", "confidence": 0.9},
+    {"name": "scope2", "value": 300000, "unit": "metric tons CO2e", "confidence": 0.9},
+    {"name": "scope3", "value": 1800000, "unit": "metric tons CO2e", "confidence": 0.85},
+    {"name": "scope3ReductionPct", "value": 7, "unit": "%", "confidence": 0.85},
+    {"name": "totalEnergy", "value": 5000, "unit": "GWh", "confidence": 0.9},
+    {"name": "renewableElectricity", "value": 32, "unit": "%", "confidence": 0.9},
+    {"name": "waterWithdrawal", "value": 51503000, "unit": "cubic meters", "confidence": 0.9},
+    {"name": "wasteLandfillAvoidance", "value": 92, "unit": "%", "confidence": 0.9},
+    {"name": "totalWaste", "value": 276188, "unit": "metric tons", "confidence": 0.85},
+    {"name": "recyclablePackaging", "value": 85, "unit": "%", "confidence": 0.85},
+    {"name": "recycledContent", "value": 25, "unit": "%", "confidence": 0.85},
+    {"name": "sustainableAgriculture", "value": 74000, "unit": "acres", "confidence": 0.8},
+    {"name": "sustainableSourcing", "value": 85, "unit": "%", "confidence": 0.9},
+    {"name": "trir", "value": 0.31, "unit": "per 200,000 hours", "confidence": 0.95},
+    {"name": "zeroInjuryFacilities", "value": 73, "unit": "%", "confidence": 0.9},
+    {"name": "totalEmployees", "value": 12000, "unit": "count", "confidence": 0.9},
+    {"name": "employeeTurnover", "value": 15, "unit": "%", "confidence": 0.85},
+    {"name": "womenLeadership", "value": 35, "unit": "%", "confidence": 0.9},
+    {"name": "womenBoard", "value": 40, "unit": "%", "confidence": 0.9},
+    {"name": "trainingHours", "value": 25, "unit": "hours", "confidence": 0.85},
+    {"name": "communityInvestment", "value": 5000000, "unit": "USD", "confidence": 0.85},
+    {"name": "volunteerHours", "value": 50000, "unit": "hours", "confidence": 0.8},
+    {"name": "boardIndependence", "value": 80, "unit": "%", "confidence": 0.9}
   ],
-  "frameworks": {
-    "GRI": 85,
-    "TCFD": 75,
-    "SBTi": 80,
-    "SDG": 70
-  },
   "targets": [
-    {
-      "name": "Net Zero by 2050",
-      "baseline": 600,
-      "target": 0,
-      "deadline": 2050,
-      "current": 400,
-      "progress": 50,
-      "category": "Emissions"
-    }
+    {"name": "28% reduction in Scope 1+2 GHG emissions", "deadline": 2030, "category": "Emissions"},
+    {"name": "15% reduction in Scope 3 emissions", "deadline": 2030, "category": "Emissions"},
+    {"name": "100% renewable electricity", "deadline": 2030, "category": "Energy"},
+    {"name": "Zero waste to landfill", "deadline": 2030, "category": "Waste"}
   ]
 }
 
-EXTRACTION RULES:
-1. ONLY extract data that is EXPLICITLY stated in the report text
-2. DO NOT invent, estimate, or use placeholder values
-3. Always include the unit exactly as written (kt CO2e, t CO2e, %, m³/t, etc.)
-4. Set confidence based on clarity: 0.9+ if very clear, 0.7-0.9 if somewhat clear, below 0.7 if unclear
-5. The company name must match what's in the report - do not make up a name
-6. If a value is not clearly stated, OMIT that metric entirely
-7. For percentages, use % not decimal (62% not 0.62)
-8. If you cannot find clear data, return an empty rawMetrics array
+═══════════════════════════════════════════════════════════════
+REPORT TEXT TO ANALYZE:
+═══════════════════════════════════════════════════════════════
 
-COMMON UNIT VARIATIONS:
-- Emissions: kt CO2e, t CO2e, MT CO2e, metric tons CO2e, tonnes CO2e
-- Energy: GWh, MWh, kWh, TJ, GJ
-- Water: m³, ML, GL, L, gallons
-- Weight: kt, t, MT, kg, tons, metric tons
+${textToAnalyze}
 
-WARNING: If the text below does not contain clear sustainability metrics, return minimal data with empty rawMetrics array. Do NOT fabricate data.
-
-Report text (first 20000 chars):
-${text.slice(0, 20000)}
-
+═══════════════════════════════════════════════════════════════
 END OF REPORT TEXT
+═══════════════════════════════════════════════════════════════
 
-Now extract ONLY what is actually present above. If you see no clear metrics, return:
-{
-  "company": "Unknown",
-  "year": ${new Date().getFullYear()},
-  "rawMetrics": [],
-  "frameworks": {},
-  "targets": []
-}
-`
+Now extract ALL metrics you can find. Remember:
+- Search thoroughly - metrics may be scattered throughout
+- Look for tables and data summaries
+- Don't miss safety data like TRIR
+- Include sustainability targets with deadlines
+- If you cannot find a value, DO NOT include it
+
+Return ONLY the JSON object, no other text.`
 
   try {
+    console.log("Calling OpenAI for comprehensive extraction...")
+    
     const completion = await openai.chat.completions.create({
       model: "gpt-4o",
       messages: [
         {
           role: "system",
-          content: "You are an expert ESG data analyst specializing in extracting structured data from sustainability reports. You are meticulous about capturing units and metric variations. Return only valid JSON.",
+          content: `You are an expert ESG data extraction specialist. You meticulously analyze sustainability reports to extract quantitative metrics.
+
+Key behaviors:
+- You search the ENTIRE document thoroughly
+- You identify numbers and their associated units carefully  
+- You understand various ways metrics are reported (tables, prose, summaries)
+- You distinguish between current year data and historical data
+- You NEVER fabricate data - if a metric isn't clearly stated, you omit it
+- You return only valid JSON with no additional text`,
         },
         {
           role: "user",
-          content: prompt,
+          content: comprehensivePrompt,
         },
       ],
-      temperature: 0.2, // Lower temperature for more deterministic extraction
+      temperature: 0.1, // Very low temperature for consistent extraction
+      max_tokens: 4000,
       response_format: { type: "json_object" },
     })
 
     const responseText = completion.choices[0].message.content || "{}"
+    console.log("OpenAI response received, parsing...")
+    
     const extractedData = JSON.parse(responseText)
+    
+    console.log(`Extracted ${extractedData.rawMetrics?.length || 0} metrics`)
 
     // Ensure required fields exist
     return {
@@ -251,4 +360,3 @@ Now extract ONLY what is actually present above. If you see no clear metrics, re
     }
   }
 }
-

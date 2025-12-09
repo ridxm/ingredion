@@ -1,0 +1,65 @@
+Metric ID,Metric Name,Category,Status,Value,Unit,Original Value,Original Unit,Confidence,Quality,Warnings
+carbonReductionPct,"Carbon Reduction (Scope 1+2) %",emissions,EXTRACTED,22,"%",22,"%",0.95,high,""
+carbonAbsolute,"Total Carbon Emissions (Scope 1+2)",emissions,NOT FOUND,,"metric tons CO2e",,,,,
+scope1,"Scope 1 Emissions",emissions,EXTRACTED,1825070,"metric tons CO2e",1825070,"metric tons CO2e",0.9,high,""
+scope2,"Scope 2 Emissions",emissions,EXTRACTED,779840,"metric tons CO2e",779840,"metric tons CO2e",0.9,high,""
+scope3,"Scope 3 Emissions",emissions,EXTRACTED,16076377,"metric tons CO2e",16076377,"metric tons CO2e",0.85,high,""
+scope3ReductionPct,"Scope 3 Reduction %",emissions,NOT FOUND,,"%",,,,,
+emissionsIntensity,"Emissions Intensity",emissions,NOT FOUND,,"kg CO2e per unit",,,,,
+biogenicEmissions,"Biogenic Emissions",emissions,EXTRACTED,30426,"metric tons CO2e",30426,"metric tons CO2e",0.9,high,""
+totalEnergy,"Total Energy Consumption",energy,EXTRACTED,32,"GWh",32,"% renewable electricity",0.9,high,"Converted totalEnergy from % renewable electricity to GWh"
+renewableElectricity,"Renewable Electricity %",energy,NOT FOUND,,"%",,,,,
+energyIntensity,"Energy Intensity",energy,NOT FOUND,,"MWh per unit",,,,,
+solarCapacity,"Solar Capacity",energy,NOT FOUND,,"MW",,,,,
+waterWithdrawal,"Water Withdrawal",water,EXTRACTED,51503000,"cubic meters",51503000,"cubic meters",0.9,high,""
+waterRecycled,"Water Recycled/Reused %",water,NOT FOUND,,"%",,,,,
+waterIntensity,"Water Intensity",water,NOT FOUND,,"L per unit",,,,,
+waterDischarge,"Water Discharge",water,NOT FOUND,,"cubic meters",,,,,
+waterStressAreas,"Water from Stress Areas %",water,NOT FOUND,,"%",,,,,
+totalWaste,"Total Waste Generated",waste,EXTRACTED,276188,"metric tons",276188,"metric tons",0.85,high,""
+wasteLandfillAvoidance,"Waste Diverted from Landfill %",waste,EXTRACTED,92,"%",92,"%",0.9,high,""
+wasteRecycled,"Waste Recycled %",waste,NOT FOUND,,"%",,,,,
+hazardousWaste,"Hazardous Waste",waste,NOT FOUND,,"metric tons",,,,,
+foodWaste,"Food Waste",waste,NOT FOUND,,"metric tons",,,,,
+recyclablePackaging,"Recyclable Packaging %",packaging,NOT FOUND,,"%",,,,,
+recycledContent,"Recycled Content in Packaging %",packaging,NOT FOUND,,"%",,,,,
+plasticReduction,"Plastic Reduction %",packaging,NOT FOUND,,"%",,,,,
+reusablePackaging,"Reusable Packaging %",packaging,NOT FOUND,,"%",,,,,
+sustainableAgriculture,"Sustainable/Regenerative Agriculture",agriculture,EXTRACTED,74000,"acres",74000,"acres",0.8,high,""
+sustainableSourcing,"Sustainably Sourced Ingredients %",agriculture,EXTRACTED,85,"%",85,"%",0.9,high,""
+deforestationFree,"Deforestation-Free Sourcing %",agriculture,NOT FOUND,,"%",,,,,
+landRestored,"Land Restored/Protected",biodiversity,NOT FOUND,,"acres",,,,,
+treesPlanted,"Trees Planted",biodiversity,NOT FOUND,,"count",,,,,
+trir,"Total Recordable Incident Rate (TRIR)",safety,EXTRACTED,0.31,"per 200,000 hours",0.31,"per 200,000 hours",0.95,high,""
+ltir,"Lost Time Injury Rate (LTIR)",safety,NOT FOUND,,"per 200,000 hours",,,,,
+fatalities,"Workplace Fatalities",safety,NOT FOUND,,"count",,,,,
+zeroInjuryFacilities,"Facilities with Zero Injuries %",safety,EXTRACTED,73,"%",73,"%",0.9,high,""
+nearMisses,"Near Misses Reported",safety,NOT FOUND,,"count",,,,,
+totalEmployees,"Total Employees",social,NOT FOUND,,"count",,,,,
+employeeTurnover,"Employee Turnover Rate",social,NOT FOUND,,"%",,,,,
+newHires,"New Hires",social,NOT FOUND,,"count",,,,,
+employeeEngagement,"Employee Engagement Score",social,NOT FOUND,,"%",,,,,
+womenWorkforce,"Women in Workforce %",diversity,NOT FOUND,,"%",,,,,
+womenLeadership,"Women in Leadership %",diversity,NOT FOUND,,"%",,,,,
+womenBoard,"Women on Board %",diversity,EXTRACTED,40,"%",40,"%",0.9,high,""
+ethnicDiversity,"Ethnic/Racial Diversity %",diversity,NOT FOUND,,"%",,,,,
+payGap,"Gender Pay Gap %",diversity,NOT FOUND,,"%",,,,,
+trainingHours,"Training Hours per Employee",training,NOT FOUND,,"hours",,,,,
+trainingInvestment,"Training Investment",training,NOT FOUND,,"USD",,,,,
+communityInvestment,"Community Investment",community,NOT FOUND,,"USD",,,,,
+volunteerHours,"Employee Volunteer Hours",community,NOT FOUND,,"hours",,,,,
+peopleBenefited,"People Benefited",community,NOT FOUND,,"count",,,,,
+supplierAudits,"Supplier Audits Conducted",supply_chain,NOT FOUND,,"count",,,,,
+supplierCompliance,"Supplier Compliance Rate %",supply_chain,NOT FOUND,,"%",,,,,
+localSourcing,"Local Sourcing %",supply_chain,NOT FOUND,,"%",,,,,
+boardIndependence,"Board Independence %",governance,EXTRACTED,100,"%",100,"%",0.9,high,""
+ceoPayRatio,"CEO Pay Ratio",governance,NOT FOUND,,"ratio",,,,,
+ethicsTraining,"Ethics Training Completion %",governance,NOT FOUND,,"%",,,,,
+dataBreaches,"Data Breaches",governance,NOT FOUND,,"count",,,,,
+productRecalls,"Product Recalls",product,NOT FOUND,,"count",,,,,
+productCertified,"Products Certified Sustainable %",product,NOT FOUND,,"%",,,,,
+customerSatisfaction,"Customer Satisfaction Score",product,NOT FOUND,,"%",,,,,
+noxEmissions,"NOx Emissions",emissions,NOT FOUND,,"metric tons",,,,,
+soxEmissions,"SOx Emissions",emissions,NOT FOUND,,"metric tons",,,,,
+vocEmissions,"VOC Emissions",emissions,NOT FOUND,,"metric tons",,,,,
+particulateMatter,"Particulate Matter Emissions",emissions,NOT FOUND,,"metric tons",,,,,

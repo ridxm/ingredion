@@ -1,7 +1,7 @@
 "use client"
 
 import { useState } from "react"
-import { Upload, FileText, Loader2, CheckCircle2, AlertCircle, ExternalLink } from "lucide-react"
+import { Upload, FileText, Loader2, CheckCircle2, AlertCircle, Building2 } from "lucide-react"
 import { Button } from "./ui/button"
 import { Card } from "./ui/card"
 import { Progress } from "./ui/progress"
@@ -12,6 +12,7 @@ interface UploadReportProps {
 
 export default function UploadReport({ onUploadSuccess }: UploadReportProps) {
   const [files, setFiles] = useState<File[]>([])
+  const [companyName, setCompanyName] = useState("")
   const [uploading, setUploading] = useState(false)
   const [progress, setProgress] = useState(0)
   const [status, setStatus] = useState<"idle" | "processing" | "success" | "error">("idle")
@@ -28,6 +29,11 @@ export default function UploadReport({ onUploadSuccess }: UploadReportProps) {
 
   const handleUpload = async () => {
     if (files.length === 0) return
+    if (!companyName.trim()) {
+      setStatus("error")
+      setMessage("Please enter a company name")
+      return
+    }
 
     setUploading(true)
     setStatus("processing")
@@ -38,6 +44,7 @@ export default function UploadReport({ onUploadSuccess }: UploadReportProps) {
     files.forEach((file) => {
       formData.append("files", file)
     })
+    formData.append("companyName", companyName.trim())
 
     try {
       setProgress(30)
@@ -61,14 +68,13 @@ export default function UploadReport({ onUploadSuccess }: UploadReportProps) {
       
       setProgress(100)
       setStatus("success")
-      setMessage(`Successfully processed ${files.length} report(s)`)
+      setMessage(`Successfully processed ${files.length} report(s) for ${companyName}`)
       setExtractedData(data)
       
       // Notify parent component if callback provided
       if (onUploadSuccess && data.results && data.results.length > 0) {
-        const companyName = data.results[0].company
         setTimeout(() => {
-          onUploadSuccess(companyName)
+          onUploadSuccess(companyName.trim())
         }, 2000)
       }
     } catch (error) {
@@ -89,6 +95,25 @@ export default function UploadReport({ onUploadSuccess }: UploadReportProps) {
             <h2 className="text-lg font-semibold text-[#F5F5F6] mb-2">Upload Sustainability Report</h2>
             <p className="text-sm text-[#A0A3AA]">
               Upload PDF reports to automatically extract ESG metrics and insights
+            </p>
+          </div>
+
+          {/* Company Name Input */}
+          <div>
+            <label className="block text-sm font-medium text-[#F5F5F6] mb-2">
+              <Building2 className="w-4 h-4 inline mr-2" />
+              Company Name *
+            </label>
+            <input
+              type="text"
+              value={companyName}
+              onChange={(e) => setCompanyName(e.target.value)}
+              placeholder="Enter company name (e.g., Ingredion, Cargill, ADM)"
+              className="w-full px-4 py-3 bg-[#141518] border border-[rgba(255,255,255,0.1)] rounded-lg text-sm text-[#F5F5F6] placeholder-[#6B6E76] focus:outline-none focus:border-[rgba(255,255,255,0.2)] focus:ring-1 focus:ring-[rgba(255,255,255,0.1)]"
+              disabled={uploading}
+            />
+            <p className="text-xs text-[#6B6E76] mt-1">
+              This name will be used to identify the company in comparisons and dashboards
             </p>
           </div>
 
@@ -158,8 +183,8 @@ export default function UploadReport({ onUploadSuccess }: UploadReportProps) {
 
           <Button
             onClick={handleUpload}
-            disabled={files.length === 0 || uploading}
-            className="w-full bg-[#F5F5F6] text-[#050506] hover:bg-[#E5E7EB]"
+            disabled={files.length === 0 || !companyName.trim() || uploading}
+            className="w-full bg-[#F5F5F6] text-[#050506] hover:bg-[#E5E7EB] disabled:opacity-50"
           >
             {uploading ? (
               <>
@@ -193,14 +218,14 @@ export default function UploadReport({ onUploadSuccess }: UploadReportProps) {
                 </div>
                 <div>
                   <p className="text-xs text-[#6B6E76] mb-1">Metrics Extracted</p>
-                  <p className="text-sm font-medium text-[#F5F5F6]">
-                    {Object.keys(result.metrics || {}).length}
+                  <p className="text-sm font-medium text-green-500">
+                    {result.metricsCount || Object.keys(result.metrics || {}).length}
                   </p>
                 </div>
                 <div>
-                  <p className="text-xs text-[#6B6E76] mb-1">Data Quality</p>
-                  <p className="text-sm font-medium text-yellow-500">
-                    Review recommended
+                  <p className="text-xs text-[#6B6E76] mb-1">Data Quality Score</p>
+                  <p className="text-sm font-medium text-[#F5F5F6]">
+                    {result.dataQuality?.score || 0}%
                   </p>
                 </div>
               </div>
@@ -211,7 +236,9 @@ export default function UploadReport({ onUploadSuccess }: UploadReportProps) {
                   {Object.entries(result.metrics || {}).slice(0, 10).map(([key, value]: [string, any]) => (
                     <div key={key} className="flex justify-between">
                       <span>{key}:</span>
-                      <span className="font-medium text-[#F5F5F6]">{value}</span>
+                      <span className="font-medium text-[#F5F5F6]">
+                        {typeof value === 'number' ? value.toLocaleString() : value}
+                      </span>
                     </div>
                   ))}
                   {Object.keys(result.metrics || {}).length > 10 && (
@@ -223,7 +250,7 @@ export default function UploadReport({ onUploadSuccess }: UploadReportProps) {
               </div>
 
               <p className="text-xs text-[#A0A3AA]">
-                Navigate to Dashboard to view full analysis
+                Navigate to Dashboard to view full analysis, or Compare to compare with other companies
               </p>
             </div>
           ))}
@@ -232,4 +259,3 @@ export default function UploadReport({ onUploadSuccess }: UploadReportProps) {
     </div>
   )
 }
-

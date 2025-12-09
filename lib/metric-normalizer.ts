@@ -105,21 +105,48 @@ export function normalizeMetrics(rawMetrics: RawMetric[]): NormalizationResult {
  * Normalize a single metric
  */
 function normalizeSingleMetric(raw: RawMetric): NormalizedMetric | null {
-  // Find metric definition
-  const definition = getMetricDefinition(raw.name)
+  // Try to find metric definition - multiple matching strategies
+  let definition = getMetricDefinition(raw.name)
+  
+  // Also try matching by ID directly (case-insensitive, various formats)
+  if (!definition) {
+    const normalizedName = raw.name.toLowerCase().replace(/[\s_-]+/g, "")
+    for (const [id, def] of Object.entries(METRIC_DEFINITIONS)) {
+      const normalizedId = id.toLowerCase().replace(/[\s_-]+/g, "")
+      if (normalizedId === normalizedName || 
+          normalizedId.includes(normalizedName) ||
+          normalizedName.includes(normalizedId)) {
+        definition = def
+        break
+      }
+    }
+  }
+  
+  // Try partial word matching
+  if (!definition) {
+    const words = raw.name.toLowerCase().split(/[\s_-]+/).filter(w => w.length > 3)
+    for (const [id, def] of Object.entries(METRIC_DEFINITIONS)) {
+      const idWords = id.toLowerCase().split(/(?=[A-Z])/).map(w => w.toLowerCase())
+      const matchCount = words.filter(w => idWords.some(iw => iw.includes(w) || w.includes(iw))).length
+      if (matchCount >= Math.min(2, words.length)) {
+        definition = def
+        break
+      }
+    }
+  }
 
   if (!definition) {
-    // Unknown metric - pass through as-is
+    // Unknown metric - pass through but mark as needing review
     return {
-      id: raw.name.toLowerCase().replace(/\s+/g, "_"),
+      id: raw.name.toLowerCase().replace(/[\s-]+/g, "_"),
       name: raw.name,
       value: raw.value,
       unit: raw.unit || "unknown",
       originalValue: raw.value,
       originalUnit: raw.unit,
-      confidence: raw.confidence || 0.5,
-      dataQuality: "low",
-      warnings: [`Unknown metric type: ${raw.name}`],
+      confidence: raw.confidence || 0.7,
+      dataQuality: "medium",
+      warnings: [`New metric type: ${raw.name} - needs categorization`],
     }
   }
 

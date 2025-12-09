@@ -2,6 +2,11 @@
 node_modules/
 .pnpm-store/
 
+# Python
+python_extractor/venv/
+__pycache__/
+*.pyc
+
 # Next.js
 .next/
 out/
@@ -34,4 +39,5 @@ Thumbs.db
 
 # Misc
 *.log
+
 

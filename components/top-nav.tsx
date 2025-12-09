@@ -108,7 +108,7 @@ export default function TopNav({ company, onCompanyChange }) {
               />
             </div>
             <div className="p-1">
-              {["Dashboard", "Targets", "Compare", "Insights"].map((item) => (
+              {["Dashboard", "Compare", "Data Quality", "Insights", "Admin"].map((item) => (
                 <button
                   key={item}
                   onClick={() => setIsCommandOpen(false)}
