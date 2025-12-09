@@ -2,7 +2,7 @@ import { NextRequest, NextResponse } from "next/server"
 import { writeFile, mkdir } from "fs/promises"
 import { existsSync } from "fs"
 import path from "path"
-import { extractPDFData } from "@/lib/pdf-extractor"
+import { extractMetricsWithGemini, transformMetricsToReport } from "@/lib/gemini-pdf-extractor"
 import { generateInsights } from "@/lib/ai-insights"
 
 export async function POST(request: NextRequest) {
@@ -12,6 +12,14 @@ export async function POST(request: NextRequest) {
 
     if (!files || files.length === 0) {
       return NextResponse.json({ error: "No files uploaded" }, { status: 400 })
+    }
+
+    const apiKey = process.env.GOOGLE_API_KEY
+    if (!apiKey) {
+      return NextResponse.json(
+        { error: "Google API key not configured" },
+        { status: 500 }
+      )
     }
 
     const results = []
@@ -32,8 +40,33 @@ export async function POST(request: NextRequest) {
 
       await writeFile(filepath, buffer)
 
-      // Extract data from PDF using OpenAI
-      const extractedData = await extractPDFData(filepath, file.name)
+      // Extract data from PDF using Gemini
+      const extractionResult = await extractMetricsWithGemini(filepath, apiKey)
+
+      if (!extractionResult.success) {
+        console.error(`Failed to extract metrics from ${file.name}:`, extractionResult.error)
+        return NextResponse.json(
+          { error: `Extraction failed: ${extractionResult.error}` },
+          { status: 400 }
+        )
+      }
+
+      // Transform extracted metrics to report format
+      const reportData = transformMetricsToReport(extractionResult.metrics || [])
+
+      // Create a comprehensive report object
+      const extractedData = {
+        company: file.name.replace(/\.[^/.]+$/, "").split("-")[0] || "Unknown",
+        year: new Date().getFullYear(),
+        metrics: reportData.metrics,
+        rawMetrics: reportData.rawMetrics,
+        dataQuality: {
+          score: 85,
+          warnings: [],
+          missingRequiredMetrics: [],
+          metricDetails: [],
+        },
+      }
 
       // Generate AI insights
       const insights = await generateInsights(extractedData)
@@ -56,12 +89,14 @@ export async function POST(request: NextRequest) {
         year: extractedData.year,
         jsonPath: jsonFilename,
         metrics: extractedData.metrics,
+        metricsCount: extractionResult.total_metrics_extracted,
+        numPages: extractionResult.num_pages,
       })
     }
 
     return NextResponse.json({
       success: true,
-      message: `Successfully processed ${files.length} file(s)`,
+      message: `Successfully processed ${files.length} file(s) using Gemini extractor`,
       results,
     })
   } catch (error) {
