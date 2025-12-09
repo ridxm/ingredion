@@ -14,11 +14,13 @@ export async function POST(request: NextRequest) {
       return NextResponse.json({ error: "No files uploaded" }, { status: 400 })
     }
 
-    const apiKey = process.env.GOOGLE_API_KEY
+    // Get API key from header or environment
+    let apiKey = request.headers.get("X-Google-API-Key") || process.env.GOOGLE_API_KEY
+    
     if (!apiKey) {
       return NextResponse.json(
-        { error: "Google API key not configured" },
-        { status: 500 }
+        { error: "Google API key not configured. Please provide your API key." },
+        { status: 400 }
       )
     }
 
@@ -68,7 +70,7 @@ export async function POST(request: NextRequest) {
         },
       }
 
-      // Generate AI insights
+      // Generate basic insights from extracted metrics
       const insights = await generateInsights(extractedData)
       extractedData.insights = insights
 

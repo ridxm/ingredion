@@ -1,10 +1,11 @@
 "use client"
 
 import { useState } from "react"
-import { Upload, FileText, Loader2, CheckCircle2, AlertCircle, ExternalLink } from "lucide-react"
+import { Upload, FileText, Loader2, CheckCircle2, AlertCircle, Eye, EyeOff } from "lucide-react"
 import { Button } from "./ui/button"
 import { Card } from "./ui/card"
 import { Progress } from "./ui/progress"
+import { Input } from "./ui/input"
 
 interface UploadReportProps {
   onUploadSuccess?: (companyName: string) => void
@@ -12,6 +13,8 @@ interface UploadReportProps {
 
 export default function UploadReport({ onUploadSuccess }: UploadReportProps) {
   const [files, setFiles] = useState<File[]>([])
+  const [apiKey, setApiKey] = useState<string>("")
+  const [showApiKey, setShowApiKey] = useState(false)
   const [uploading, setUploading] = useState(false)
   const [progress, setProgress] = useState(0)
   const [status, setStatus] = useState<"idle" | "processing" | "success" | "error">("idle")
@@ -28,6 +31,11 @@ export default function UploadReport({ onUploadSuccess }: UploadReportProps) {
 
   const handleUpload = async () => {
     if (files.length === 0) return
+    if (!apiKey.trim()) {
+      setStatus("error")
+      setMessage("Please enter your Google Gemini API key")
+      return
+    }
 
     setUploading(true)
     setStatus("processing")
@@ -45,11 +53,14 @@ export default function UploadReport({ onUploadSuccess }: UploadReportProps) {
 
       const response = await fetch("/api/extract", {
         method: "POST",
+        headers: {
+          "X-Google-API-Key": apiKey,
+        },
         body: formData,
       })
 
       setProgress(60)
-      setMessage("Analyzing ESG data with AI...")
+      setMessage("Analyzing ESG data...")
 
       if (!response.ok) {
         const errorData = await response.json().catch(() => ({ error: "Unknown error" }))
@@ -88,7 +99,40 @@ export default function UploadReport({ onUploadSuccess }: UploadReportProps) {
           <div>
             <h2 className="text-lg font-semibold text-[#F5F5F6] mb-2">Upload Sustainability Report</h2>
             <p className="text-sm text-[#A0A3AA]">
-              Upload PDF reports to automatically extract ESG metrics and insights
+              Upload PDF reports to automatically extract ESG metrics using Google Gemini AI
+            </p>
+          </div>
+
+          {/* Google API Key Input */}
+          <div className="space-y-2">
+            <label className="text-sm font-medium text-[#F5F5F6]">Google Gemini API Key</label>
+            <div className="relative">
+              <Input
+                type={showApiKey ? "text" : "password"}
+                placeholder="Enter your Google Gemini API key (sk-...)"
+                value={apiKey}
+                onChange={(e) => setApiKey(e.target.value)}
+                disabled={uploading}
+                className="bg-[#141518] border border-[rgba(255,255,255,0.06)] text-[#F5F5F6] placeholder-[#6B6E76] pr-10"
+              />
+              <button
+                type="button"
+                onClick={() => setShowApiKey(!showApiKey)}
+                className="absolute right-3 top-1/2 -translate-y-1/2 text-[#6B6E76] hover:text-[#A0A3AA] transition-colors"
+              >
+                {showApiKey ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
+              </button>
+            </div>
+            <p className="text-xs text-[#6B6E76]">
+              Get your free API key from{" "}
+              <a
+                href="https://aistudio.google.com/apikey"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="text-blue-400 hover:text-blue-300 underline"
+              >
+                Google AI Studio
+              </a>
             </p>
           </div>
 

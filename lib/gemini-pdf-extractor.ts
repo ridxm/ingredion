@@ -20,8 +20,23 @@ interface ExtractionResult {
 export async function extractMetricsWithGemini(filePath: string, apiKey: string): Promise<ExtractionResult> {
   return new Promise((resolve, reject) => {
     const pythonPath = join(process.cwd(), "python_extractor", "extractor_service.py")
+    
+    // Use the virtual environment Python if available, otherwise fallback to python3
+    const venvPythonPath = join(process.cwd(), "..", ".venv", "bin", "python")
+    let pythonCommand = "python3"
+    let pythonExecPath: string | undefined = undefined
+    
+    try {
+      const fs = require("fs")
+      if (fs.existsSync(venvPythonPath)) {
+        pythonCommand = venvPythonPath
+        pythonExecPath = venvPythonPath
+      }
+    } catch {
+      // Fallback to python3 if venv path check fails
+    }
 
-    const pythonProcess = spawn("python3", [pythonPath, filePath, apiKey], {
+    const pythonProcess = spawn(pythonCommand, [pythonPath, filePath, apiKey], {
       cwd: join(process.cwd(), "python_extractor"),
       env: {
         ...process.env,
